@@ -1,3 +1,17 @@
+/* Waypoint travel theme */
+:root {
+  --wp-ink: #1d2a33;
+  --wp-ocean: #0b4f6c;
+  --wp-ocean-dark: #083a50;
+  --wp-sand: #f7f3ec;
+  --wp-sunset: #f4a259;
+  --wp-sunset-dark: #e08a3c;
+  --bs-link-color: var(--wp-ocean);
+  --bs-link-hover-color: var(--wp-ocean-dark);
+  --bs-link-color-rgb: 11, 79, 108;
+  --bs-link-hover-color-rgb: 8, 58, 80;
+}
+
 html {
   font-size: 14px;
 }
@@ -8,24 +22,139 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: var(--wp-ink);
+  background-color: #fff;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+main {
+  flex: 1 0 auto;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+main:focus {
+  outline: none;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 1080;
+  padding: 0.5rem 1rem;
+  background: #fff;
+  color: var(--wp-ocean);
+  border-radius: 0.25rem;
+}
+
+/* Visible keyboard focus everywhere */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+.dropdown-item:focus-visible {
+  outline: 3px solid var(--wp-sunset);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+/* Navbar */
+.site-navbar {
+  background-color: var(--wp-ocean);
+}
+
+.site-navbar .nav-link {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.site-navbar .nav-link:hover,
+.site-navbar .nav-link:focus {
+  color: #fff;
+}
+
+/* Hero */
+.hero {
+  padding: 5rem 0 4rem;
+  margin-bottom: 3rem;
+  color: #fff;
+  background: linear-gradient(135deg, var(--wp-ocean) 0%, #13708f 60%, #2a8c9e 100%);
+}
+
+.hero .lead {
+  max-width: 40rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* Page header used on inner pages */
+.page-header {
+  padding: 2.5rem 0 2rem;
+  margin-bottom: 2rem;
+  background-color: var(--wp-sand);
+  border-bottom: 1px solid #e8e1d4;
+}
+
+/* Buttons */
+.btn-accent {
+  --bs-btn-color: var(--wp-ink);
+  --bs-btn-bg: var(--wp-sunset);
+  --bs-btn-border-color: var(--wp-sunset);
+  --bs-btn-hover-color: var(--wp-ink);
+  --bs-btn-hover-bg: var(--wp-sunset-dark);
+  --bs-btn-hover-border-color: var(--wp-sunset-dark);
+  --bs-btn-active-color: var(--wp-ink);
+  --bs-btn-active-bg: var(--wp-sunset-dark);
+  --bs-btn-active-border-color: var(--wp-sunset-dark);
+  font-weight: 600;
+}
+
+/* Cards */
+.wp-card {
+  border: 1px solid #e6e1d8;
+  border-top: 4px solid var(--wp-sunset);
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(29, 42, 51, 0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wp-card:hover,
+.wp-card:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1.25rem rgba(29, 42, 51, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wp-card {
+    transition: none;
+  }
+
+  .wp-card:hover,
+  .wp-card:focus-within {
+    transform: none;
+  }
+}
+
+/* Image placeholders until real photos arrive */
+.img-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  background-color: var(--wp-sand);
+  color: #5c6770;
+  border: 2px dashed #d6cdbd;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Footer */
+.site-footer {
+  flex-shrink: 0;
+  color: #e9eef1;
+  background-color: var(--wp-ink);
+  font-size: 0.9rem;
+}
+
+.site-footer a {
+  color: #fff;
 }

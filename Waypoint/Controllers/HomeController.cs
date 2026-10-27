@@ -6,16 +6,19 @@ namespace Waypoint.Controllers;
 
 public class HomeController : Controller
 {
+    [Route("")]
     public IActionResult Index()
     {
         return View();
     }
 
+    [Route("privacy")]
     public IActionResult Privacy()
     {
         return View();
     }
 
+    [Route("error")]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

@@ -1,8 +1,43 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<section class="hero" aria-labelledby="hero-heading">
+    <div class="container">
+        <h1 id="hero-heading" class="display-4 fw-bold">Find your next waypoint</h1>
+        <p class="lead">Destinations, photos, and hard-won travel tips from the Waypoint team.</p>
+        <a class="btn btn-accent btn-lg" asp-controller="About" asp-action="Index">Meet the team</a>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 wp-card">
+                <div class="card-body">
+                    <h2 class="h5 card-title">Destinations <span class="badge text-bg-light">Coming soon</span></h2>
+                    <p class="card-text">Places we've been and places we're planning, with what made each one worth the trip.</p>
+                    @* Riddhi: add a stretched-link to Destinations/Index here and remove the badge. *@
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 wp-card">
+                <div class="card-body">
+                    <h2 class="h5 card-title">Gallery <span class="badge text-bg-light">Coming soon</span></h2>
+                    <p class="card-text">Snapshots from the road, organized by trip.</p>
+                    @* Evan: add a stretched-link to Home/Gallery here and remove the badge. *@
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 wp-card">
+                <div class="card-body">
+                    <h2 class="h5 card-title">Travel Tips <span class="badge text-bg-light">Coming soon</span></h2>
+                    <p class="card-text">Packing, budgeting, and getting around, learned the hard way.</p>
+                    @* Evan: add a stretched-link to Home/Tips here and remove the badge. *@
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

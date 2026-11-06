@@ -18,6 +18,16 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult Gallery()
+    {
+               return View();
+    }
+
+    public IActionResult Tips()
+    {
+        return View();
+    }
+
     [Route("error")]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

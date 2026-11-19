@@ -134,6 +134,18 @@ button:focus-visible,
   }
 }
 
+/* Destinations */
+.rating {
+  color: var(--wp-sunset-dark);
+  letter-spacing: 0.05em;
+}
+
+.continent-filter {
+  --bs-nav-pills-link-active-bg: var(--wp-ocean);
+  --bs-nav-link-color: var(--wp-ocean);
+  --bs-nav-link-hover-color: var(--wp-ocean-dark);
+}
+
 /* Image placeholders until real photos arrive */
 .img-placeholder {
   display: flex;

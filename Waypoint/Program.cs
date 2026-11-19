@@ -1,7 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using Waypoint.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Register the EF Core DbContext so controllers can receive it through constructor injection.
+// The connection string lives in appsettings.json and points at SQL Server LocalDB.
+builder.Services.AddDbContext<WaypointDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("WaypointDb")
+        ?? throw new InvalidOperationException("Connection string 'WaypointDb' not found.")));
 
 // Generate lowercase URLs from tag helpers and Url.Action (e.g. /about/kymani, not /About/Kymani).
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
@@ -14,6 +23,13 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+else
+{
+    // In development, create the LocalDB database and apply any pending migrations on startup
+    // so a fresh clone runs without a manual `dotnet ef database update`.
+    using var scope = app.Services.CreateScope();
+    scope.ServiceProvider.GetRequiredService<WaypointDbContext>().Database.Migrate();
 }
 
 app.UseHttpsRedirection();

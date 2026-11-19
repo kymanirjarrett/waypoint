@@ -1,0 +1,41 @@
+@model Destination
+@{
+    ViewData["Title"] = Model.Name;
+    var usd = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+}
+
+<section class="page-header">
+    <div class="container">
+        <p class="mb-1"><a asp-action="Index">&larr; All destinations</a></p>
+        <h1>@Model.Name</h1>
+        <p class="lead mb-0">@Model.Country &middot; @Model.Continent</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <p class="fs-5">@Model.Summary</p>
+            <p>@Model.Description</p>
+        </div>
+        <div class="col-lg-4">
+            <aside class="card wp-card" aria-labelledby="facts-heading">
+                <div class="card-body">
+                    <h2 id="facts-heading" class="h5">Quick facts</h2>
+                    <dl class="mb-0">
+                        <dt>@Html.DisplayNameFor(m => m.BestTimeToVisit)</dt>
+                        <dd>@Model.BestTimeToVisit</dd>
+                        <dt>@Html.DisplayNameFor(m => m.AverageDailyBudgetUsd)</dt>
+                        <dd>@Model.AverageDailyBudgetUsd.ToString("C0", usd)</dd>
+                        <dt>Team rating</dt>
+                        <dd><span class="rating" aria-label="Rated @Model.Rating out of 5">@(new string('★', Model.Rating))@(new string('☆', 5 - Model.Rating))</span></dd>
+                        <dt>@Html.DisplayNameFor(m => m.RecommendedBy)</dt>
+                        <dd>@Model.RecommendedBy</dd>
+                        <dt>Status</dt>
+                        <dd class="mb-0">@(Model.Visited ? "Visited" : "On the wish list")</dd>
+                    </dl>
+                </div>
+            </aside>
+        </div>
+    </div>
+</div>

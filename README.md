@@ -18,6 +18,7 @@ Everyone owns their own About page (`Views/About/<Name>.cshtml`).
 
 - .NET 10, ASP.NET Core MVC (C#)
 - Razor views with Bootstrap 5 and jQuery
+- Entity Framework Core 10 with SQL Server LocalDB
 - xUnit for tests
 - GitHub Actions for CI, Dependabot for dependency updates
 - Developed in JetBrains Rider
@@ -34,8 +35,9 @@ All routes use attribute routing (`[Route]` on each action) and lowercase URLs.
 | `/about/kymani` | Kymani's page | `AboutController.Kymani` | Placeholder |
 | `/about/riddhi` | Riddhi's page | `AboutController.Riddhi` | Placeholder |
 | `/about/evan` | Evan's page | `AboutController.Evan` | Placeholder |
-| `/destinations` | Destination card grid | `DestinationsController.Index` | Planned (Riddhi) |
-| `/destinations/{slug}` | Destination detail (404 for unknown slugs) | `DestinationsController.Details` | Planned (Riddhi) |
+| `/destinations` | Destination card grid, filterable by `?continent=` | `DestinationsController.Index` | Done |
+| `/destinations/table` | All database rows in a sortable HTML table (`?sort=`) | `DestinationsController.Table` | Done |
+| `/destinations/{slug}` | Destination detail (404 for unknown slugs) | `DestinationsController.Details` | Done |
 | `/gallery` | Gallery | `HomeController.Gallery` | Planned (Evan) |
 | `/tips` | Travel Tips | `HomeController.Tips` | Planned (Evan) |
 
@@ -51,7 +53,21 @@ Prerequisite: the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.
 dotnet run --project Waypoint --launch-profile https
 ```
 
-Then open <https://localhost:7085>. Run the tests with:
+Then open <https://localhost:7085>.
+
+### Database
+
+Destinations are stored in SQL Server LocalDB (installed with Visual Studio or the SQL Server Express LocalDB package). The connection string `WaypointDb` is in `Waypoint/appsettings.json`, and `WaypointDbContext` is registered in `Program.cs` and injected into `DestinationsController`.
+
+In Development the app applies pending migrations on startup, so the `Waypoint` database and its seed rows are created the first time you run it. To manage the schema by hand:
+
+```bash
+dotnet tool install --global dotnet-ef   # once
+dotnet ef database update --project Waypoint
+dotnet ef migrations add <Name> --project Waypoint
+```
+
+Seed rows live in `Waypoint/Data/SeedData.cs`. After changing them, add a new migration. Run the tests with:
 
 ```bash
 dotnet test
@@ -75,11 +91,11 @@ feature/*  ──PR──▶  develop  ──PR──▶  main
 
 **Phase 1 (check-in 1):** project setup, layout, Home and About controllers, CI. Then Destinations, Gallery, and Tips from each owner's feature branch.
 
-**Phase 2: database**
+**Phase 2: database (done)**
 - EF Core with SQL Server LocalDB for development
 - `Destination` model with a unique `Slug`
 - `DbContext` registered in `Program.cs` and injected into controllers
-- Connection string in `appsettings.Development.json`, schema managed with migrations
+- Connection string in `appsettings.json`, schema managed with migrations
 
 **Phase 3: deployment**
 - Deploy `main` to Azure App Service (F1 tier) via GitHub Actions

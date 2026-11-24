@@ -67,6 +67,23 @@ dotnet ef database update --project Waypoint
 dotnet ef migrations add <Name> --project Waypoint
 ```
 
+### Running on macOS
+
+LocalDB is Windows-only, so on a Mac run SQL Server in Docker and point the app at it with [user secrets](https://learn.microsoft.com/aspnet/core/security/app-secrets). The LocalDB string in `appsettings.json` stays as is for Windows, and user secrets override it only on your machine.
+
+1. Install Docker Desktop. On Apple Silicon, turn on **Settings > General > Use Rosetta for x86_64/amd64 emulation** (the SQL Server image is x86-only).
+2. Start a container. Pick your own strong SA password:
+   ```bash
+   docker run -d --platform linux/amd64 --name waypoint-sql \
+     -e ACCEPT_EULA=Y -e "MSSQL_SA_PASSWORD=<your-password>" \
+     -p 14333:1433 mcr.microsoft.com/mssql/server:2022-latest
+   ```
+3. Store the connection string as a user secret (kept in your user profile, never in the repo):
+   ```bash
+   dotnet user-secrets set "ConnectionStrings:WaypointDb" "Server=localhost,14333;Database=Waypoint;User Id=sa;Password=<your-password>;TrustServerCertificate=True;MultipleActiveResultSets=true" --project Waypoint
+   ```
+4. Run the app as usual. Migrations apply on startup. Later, `docker start waypoint-sql` brings the database back.
+
 Seed rows live in `Waypoint/Data/SeedData.cs`. After changing them, add a new migration. Run the tests with:
 
 ```bash

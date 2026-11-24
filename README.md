@@ -144,8 +144,21 @@ feature/*  ──PR──▶  develop  ──PR──▶  main
 - `DbContext` registered in `Program.cs` and injected into controllers
 - Connection string in `appsettings.json`, schema managed with migrations
 
-**Phase 3: deployment**
-- Deploy `main` to Azure App Service (F1 tier) via GitHub Actions
-- Azure SQL free offer in production
-- Connection string in App Service configuration, never committed
-- Managed Identity for passwordless database access
+**Phase 3: deployment (done)**: see [Deployment](#deployment).
+
+## Deployment
+
+```
+GitHub Actions (main) --OIDC--> Azure App Service F1 (Windows, .NET 10)
+                                   |  system-assigned managed identity
+                                   v
+                                Azure SQL Database (free offer, serverless)
+```
+
+- **Hosting:** Azure App Service Free (F1) on Windows, which now runs 64-bit apps on the free tier. HTTPS only, FTP and basic-auth publishing turned off.
+- **Database:** Azure SQL Database free offer, set to auto-pause until next month when the free limit is reached, so it can never bill. The server uses Microsoft Entra-only authentication: there is no SQL password anywhere.
+- **App to database:** the web app's system-assigned managed identity signs in to SQL (`Authentication=Active Directory Default`). Its database user has only `db_datareader` and `db_datawriter`. It cannot change the schema, so a bug or a compromised app cannot drop tables.
+- **Deploys:** every push to `main` runs the `deploy` job after `build` passes. It signs in through OpenID Connect with a user-assigned managed identity whose federated credential trusts only this repo's `production` environment, and whose role is Website Contributor on this one web app. No credentials are stored in GitHub; `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` are identifiers saved as environment variables. A smoke test then requests `/`, `/destinations`, and a detail page and fails the job on anything but 200.
+- **Connection string:** set in App Service configuration, never in `appsettings*.json`. EF Core retries transient failures because the paused database takes a moment to resume.
+- **Schema changes:** migrations do not run on startup in production. Run them from a signed-in machine with `infra/azure-migrate.sh`, which opens a firewall rule for your IP, applies migrations as the Entra admin, ensures the app's database user, and removes the rule.
+- **Setup from scratch:** `infra/azure-setup.sh` creates every resource with the Azure CLI. A $5 monthly budget alert is the safety net.

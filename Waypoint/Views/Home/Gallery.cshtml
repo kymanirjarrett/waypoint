@@ -1,8 +1,25 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     ViewData["Title"] = "Gallery";
 }
 
-<h1>Gallery</h1>
+<header class="page-header">
+    <h1>Gallery</h1>
+</header>
+
+<section class="wp-section">
+    @* Empty state: delete this paragraph once real content is added. *@
+    <p class="wp-empty">Photos from our trips are on the way. Until then, <a asp-controller="Destinations" asp-action="Index">browse the destinations</a>.</p>
+    @*
+        Evan: build a list of GalleryPhoto and pass it to the shared grid. Example:
+
+        @{
+            var photos = new List<GalleryPhoto>
+            {
+                new("/images/gallery/hilton-head-pier.webp", "Describe the scene for screen readers", "Hilton Head Island, 2024"),
+            };
+        }
+        <partial name="_PhotoGrid" model="photos" />
+
+        Put image files in wwwroot/images/gallery/. See "Gallery and Tips partials" in the README.
+    *@
+</section>

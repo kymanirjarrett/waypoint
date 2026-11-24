@@ -1,41 +1,65 @@
 @model Destination
 @{
     ViewData["Title"] = Model.Name;
+    ViewData["Description"] = Model.Summary;
     var usd = System.Globalization.CultureInfo.GetCultureInfo("en-US");
 }
 
-<section class="page-header">
-    <div class="container">
-        <p class="mb-1"><a asp-action="Index">&larr; All destinations</a></p>
+<header class="page-header">
+    <p class="wp-back"><a asp-action="Index">All destinations</a></p>
+    <div>
         <h1>@Model.Name</h1>
-        <p class="lead mb-0">@Model.Country &middot; @Model.Continent</p>
+        <p class="wp-place__meta mt-2">@Model.Country &middot; @Model.Continent</p>
+    </div>
+</header>
+
+@if (!string.IsNullOrEmpty(Model.ImagePath))
+{
+    <figure class="wp-feature-photo">
+        <img src="@Model.ImagePath" alt="@Model.ImageAlt" width="1600" height="1067" fetchpriority="high" />
+        <figcaption class="wp-photo-credit">
+            Photo: <a href="@Model.ImageCreditUrl" rel="noopener">@Model.ImageCredit on Unsplash</a>
+        </figcaption>
+    </figure>
+}
+
+<section class="wp-section">
+    <div class="wp-detail">
+        <article class="wp-measure">
+            <p class="wp-detail__lead">@Model.Summary</p>
+            <p>@Model.Description</p>
+            @if (ViewData["Next"] is Destination next)
+            {
+                <p class="wp-next">
+                    Next destination:
+                    <a asp-action="Details" asp-route-slug="@next.Slug">@next.Name, @next.Country</a>
+                </p>
+            }
+        </article>
+        <aside class="wp-facts" aria-labelledby="facts-heading">
+            <h2 id="facts-heading">Before you go</h2>
+            <dl>
+                <div>
+                    <dt>@Html.DisplayNameFor(m => m.BestTimeToVisit)</dt>
+                    <dd>@Model.BestTimeToVisit</dd>
+                </div>
+                <div>
+                    <dt>@Html.DisplayNameFor(m => m.AverageDailyBudgetUsd)</dt>
+                    <dd>About @Model.AverageDailyBudgetUsd.ToString("C0", usd) a day</dd>
+                </div>
+                <div>
+                    <dt>Team rating</dt>
+                    <dd>@Model.Rating out of 5</dd>
+                </div>
+                <div>
+                    <dt>@Html.DisplayNameFor(m => m.RecommendedBy)</dt>
+                    <dd>@Model.RecommendedBy</dd>
+                </div>
+                <div>
+                    <dt>Status</dt>
+                    <dd>@(Model.Visited ? "Visited" : "On the wish list")</dd>
+                </div>
+            </dl>
+        </aside>
     </div>
 </section>
-
-<div class="container">
-    <div class="row g-4">
-        <div class="col-lg-8">
-            <p class="fs-5">@Model.Summary</p>
-            <p>@Model.Description</p>
-        </div>
-        <div class="col-lg-4">
-            <aside class="card wp-card" aria-labelledby="facts-heading">
-                <div class="card-body">
-                    <h2 id="facts-heading" class="h5">Quick facts</h2>
-                    <dl class="mb-0">
-                        <dt>@Html.DisplayNameFor(m => m.BestTimeToVisit)</dt>
-                        <dd>@Model.BestTimeToVisit</dd>
-                        <dt>@Html.DisplayNameFor(m => m.AverageDailyBudgetUsd)</dt>
-                        <dd>@Model.AverageDailyBudgetUsd.ToString("C0", usd)</dd>
-                        <dt>Team rating</dt>
-                        <dd><span class="rating" aria-label="Rated @Model.Rating out of 5">@(new string('★', Model.Rating))@(new string('☆', 5 - Model.Rating))</span></dd>
-                        <dt>@Html.DisplayNameFor(m => m.RecommendedBy)</dt>
-                        <dd>@Model.RecommendedBy</dd>
-                        <dt>Status</dt>
-                        <dd class="mb-0">@(Model.Visited ? "Visited" : "On the wish list")</dd>
-                    </dl>
-                </div>
-            </aside>
-        </div>
-    </div>
-</div>

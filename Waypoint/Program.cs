@@ -10,7 +10,9 @@ builder.Services.AddControllersWithViews();
 // The connection string lives in appsettings.json and points at SQL Server LocalDB.
 builder.Services.AddDbContext<WaypointDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("WaypointDb")
-        ?? throw new InvalidOperationException("Connection string 'WaypointDb' not found.")));
+            ?? throw new InvalidOperationException("Connection string 'WaypointDb' not found."),
+        // The Azure SQL free database auto-pauses when idle; the first query after that can fail transiently while it resumes.
+        sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
 // Generate lowercase URLs from tag helpers and Url.Action (e.g. /about/kymani, not /About/Kymani).
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
@@ -31,6 +33,9 @@ else
     using var scope = app.Services.CreateScope();
     scope.ServiceProvider.GetRequiredService<WaypointDbContext>().Database.Migrate();
 }
+
+// Empty error responses (like NotFound() for an unknown slug) re-run through a styled page instead of a blank browser 404.
+app.UseStatusCodePagesWithReExecute("/status/{0}");
 
 app.UseHttpsRedirection();
 app.UseRouting();

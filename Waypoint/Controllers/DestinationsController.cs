@@ -54,6 +54,21 @@ public class DestinationsController(WaypointDbContext db) : Controller
             .AsNoTracking()
             .FirstOrDefaultAsync(d => d.Slug == slug.ToLower());
 
-        return destination is null ? NotFound() : View(destination);
+        if (destination is null)
+        {
+            return NotFound();
+        }
+
+        // "Next destination" link: the next one alphabetically, wrapping back to the first.
+        ViewData["Next"] = await db.Destinations.AsNoTracking()
+                               .Where(d => string.Compare(d.Name, destination.Name) > 0)
+                               .OrderBy(d => d.Name)
+                               .FirstOrDefaultAsync()
+                           ?? await db.Destinations.AsNoTracking()
+                               .Where(d => d.Id != destination.Id)
+                               .OrderBy(d => d.Name)
+                               .FirstOrDefaultAsync();
+
+        return View(destination);
     }
 }

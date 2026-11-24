@@ -1,15 +1,29 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Waypoint.Data;
 using Waypoint.Models;
 
 namespace Waypoint.Controllers;
 
-public class HomeController : Controller
+public class HomeController(WaypointDbContext db) : Controller
 {
+    /// <summary>Number of destinations previewed on the home page.</summary>
+    public const int PreviewCount = 4;
+
     [Route("")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        // The top-rated place becomes the hero photo; the next ones are previewed below it.
+        var preview = await db.Destinations
+            .AsNoTracking()
+            .OrderByDescending(d => d.Rating)
+            .ThenBy(d => d.Name)
+            .Take(PreviewCount + 1)
+            .ToListAsync();
+
+        ViewData["DestinationCount"] = await db.Destinations.CountAsync();
+        return View(preview);
     }
 
     [Route("privacy")]
@@ -18,11 +32,13 @@ public class HomeController : Controller
         return View();
     }
 
+    [Route("gallery")]
     public IActionResult Gallery()
     {
-               return View();
+        return View();
     }
 
+    [Route("tips")]
     public IActionResult Tips()
     {
         return View();
@@ -33,5 +49,14 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    /// <summary>Re-executed by UseStatusCodePagesWithReExecute for empty 4xx/5xx responses, such as an unknown slug.</summary>
+    [Route("status/{code:int}")]
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult StatusCodePage(int code)
+    {
+        Response.StatusCode = code;
+        return View(code == StatusCodes.Status404NotFound ? "NotFound" : "StatusCode", code);
     }
 }

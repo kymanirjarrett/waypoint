@@ -1,0 +1,33 @@
+@model IEnumerable<GalleryPhoto>
+@* Responsive photo grid. Usage: <partial name="_PhotoGrid" model="photos" /> where photos is a list of GalleryPhoto. *@
+
+@if (Model.Any())
+{
+    <ul class="wp-photo-grid">
+        @foreach (var photo in Model)
+        {
+            <li>
+                <figure>
+                    <img src="@photo.Src" alt="@photo.Alt" loading="lazy" decoding="async" />
+                    <figcaption>
+                        @photo.Caption
+                        @if (!string.IsNullOrEmpty(photo.Credit))
+                        {
+                            <span class="wp-credit">
+                                Photo:
+                                @if (!string.IsNullOrEmpty(photo.CreditUrl))
+                                {
+                                    <a href="@photo.CreditUrl" rel="noopener">@photo.Credit</a>
+                                }
+                                else
+                                {
+                                    @photo.Credit
+                                }
+                            </span>
+                        }
+                    </figcaption>
+                </figure>
+            </li>
+        }
+    </ul>
+}

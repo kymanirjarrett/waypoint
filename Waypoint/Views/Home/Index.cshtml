@@ -1,44 +1,68 @@
+@model IEnumerable<Destination>
 @{
     ViewData["Title"] = "Home";
+    var count = ViewData["DestinationCount"] as int? ?? Model.Count();
+    var usd = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+    var hero = Model.FirstOrDefault();
+    var rest = Model.Skip(1);
 }
 
-<section class="hero" aria-labelledby="hero-heading">
-    <div class="container">
-        <h1 id="hero-heading" class="display-4 fw-bold">Find your next waypoint</h1>
-        <p class="lead">Destinations, photos, and hard-won travel tips from the Waypoint team.</p>
-        <a class="btn btn-accent btn-lg" asp-controller="About" asp-action="Index">Meet the team</a>
+<section class="wp-hero" aria-labelledby="hero-heading">
+    <div class="wp-hero__text">
+        <h1 id="hero-heading">Places worth the trip</h1>
+        <p class="lead">@count destinations we&rsquo;ve been to or are saving up for, with when to go and what a day there costs.</p>
+        <div class="wp-hero__actions">
+            <a class="btn btn-accent btn-lg" asp-controller="Destinations" asp-action="Index">Browse destinations</a>
+            <a class="wp-arrow-link" asp-controller="Destinations" asp-action="Table">Compare them in a table</a>
+        </div>
     </div>
+    @if (hero is not null && !string.IsNullOrEmpty(hero.ImagePath))
+    {
+        <figure class="wp-hero__photo">
+            <img src="@hero.ImagePath" alt="@hero.ImageAlt" width="1600" height="1067" fetchpriority="high" />
+            <figcaption>
+                <a asp-controller="Destinations" asp-action="Details" asp-route-slug="@hero.Slug">@hero.Name</a>
+                &middot; Photo: <a href="@hero.ImageCreditUrl" rel="noopener">@hero.ImageCredit</a>
+            </figcaption>
+        </figure>
+    }
 </section>
 
-<div class="container">
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card h-100 wp-card">
-                <div class="card-body">
-                    <h2 class="h5 card-title">
-                        <a class="stretched-link text-decoration-none" asp-controller="Destinations" asp-action="Index">Destinations</a>
-                    </h2>
-                    <p class="card-text">Places we've been and places we're planning, with what made each one worth the trip.</p>
-                </div>
-            </div>
+<section class="wp-section" aria-labelledby="top-rated-heading">
+    <div class="wp-toolbar">
+        <h2 id="top-rated-heading" class="wp-title">The team&rsquo;s top picks</h2>
+        <a class="wp-arrow-link" asp-controller="Destinations" asp-action="Index">All @count destinations</a>
+    </div>
+
+    <ul class="wp-grid list-unstyled m-0">
+        @foreach (var d in rest)
+        {
+            <li class="wp-place">
+                <img class="wp-place__photo" src="@d.ImagePath" alt="@d.ImageAlt" width="1600" height="1067" loading="lazy" decoding="async" />
+                <partial name="_Stop" model="d.Visited" />
+                <h3><a asp-controller="Destinations" asp-action="Details" asp-route-slug="@d.Slug">@d.Name</a></h3>
+                <p class="wp-place__meta">@d.Country &middot; @d.Continent</p>
+                <p class="wp-place__summary">@d.Summary</p>
+                <p class="wp-place__facts">
+                    <span>Rated @d.Rating/5</span>
+                    <span>About @d.AverageDailyBudgetUsd.ToString("C0", usd) a day</span>
+                </p>
+            </li>
+        }
+    </ul>
+</section>
+
+<section class="wp-section wp-band-dark" aria-label="More from Waypoint">
+    <div class="wp-split">
+        <div>
+            <h2>Gallery: photos from our own trips</h2>
+            <p>Evan is putting this page together. Expect shots from the places on this site and a few that aren&rsquo;t.</p>
+            <a class="wp-arrow-link" asp-controller="Home" asp-action="Gallery">Open the gallery</a>
         </div>
-        <div class="col-md-4">
-            <div class="card h-100 wp-card">
-                <div class="card-body">
-                    <h2 class="h5 card-title">Gallery <span class="badge text-bg-light">Coming soon</span></h2>
-                    <p class="card-text">Snapshots from the road, organized by trip.</p>
-                    @* Evan: add a stretched-link to Home/Gallery here and remove the badge. *@
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 wp-card">
-                <div class="card-body">
-                    <h2 class="h5 card-title">Travel Tips <span class="badge text-bg-light">Coming soon</span></h2>
-                    <p class="card-text">Packing, budgeting, and getting around, learned the hard way.</p>
-                    @* Evan: add a stretched-link to Home/Tips here and remove the badge. *@
-                </div>
-            </div>
+        <div>
+            <h2>Travel Tips: packing, budgets, getting around</h2>
+            <p>Practical advice from our trips, also in progress. It&rsquo;s the page to check before you book.</p>
+            <a class="wp-arrow-link" asp-controller="Home" asp-action="Tips">Read the tips</a>
         </div>
     </div>
-</div>
+</section>

@@ -52,6 +52,26 @@ namespace Waypoint.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
+                    b.Property<string>("ImageAlt")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("ImageCredit")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ImageCreditUrl")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -94,6 +114,10 @@ namespace Waypoint.Migrations
                             Continent = "Asia",
                             Country = "Japan",
                             Description = "Japan's former capital has more than 1,600 temples and shrines. Walk the torii tunnels at Fushimi Inari early in the morning, rent a bike to reach the Philosopher's Path, and spend an evening in Gion. Buy an IC card for buses and trains, and plan at least three days.",
+                            ImageAlt = "A stone path curving through a tunnel of vermilion torii gates at Fushimi Inari Shrine, with a black lantern hanging on the left.",
+                            ImageCredit = "Stefano Bucciarelli",
+                            ImageCreditUrl = "https://unsplash.com/photos/thousands-of-vibrant-orange-torii-gates-at-fushimi-inari-shrine-Vu9O6DRGXQU",
+                            ImagePath = "/images/destinations/kyoto.webp",
                             Name = "Kyoto",
                             Rating = 5,
                             RecommendedBy = "Riddhi",
@@ -109,6 +133,10 @@ namespace Waypoint.Migrations
                             Continent = "Europe",
                             Country = "Portugal",
                             Description = "Ride Tram 28 through Alfama, catch sunset from a miradouro, and take the train to Sintra for a day of palaces. Lisbon is one of the more affordable capitals in Western Europe, and most of the center is walkable if you don't mind the hills.",
+                            ImageAlt = "A yellow tram climbing a steep, busy street in Lisbon between old stone buildings and iron street lamps.",
+                            ImageCredit = "Jacek Urbanski",
+                            ImageCreditUrl = "https://unsplash.com/photos/a-yellow-tram-rides-down-a-street-in-lisbon-0sODcpe2RPo",
+                            ImagePath = "/images/destinations/lisbon.webp",
                             Name = "Lisbon",
                             Rating = 5,
                             RecommendedBy = "Kymani",
@@ -124,6 +152,10 @@ namespace Waypoint.Migrations
                             Continent = "North America",
                             Country = "Canada",
                             Description = "Lake Louise and Moraine Lake are the headliners, but book the Parks Canada shuttle because parking fills by sunrise. Hike to the Lake Agnes Tea House, drive the Icefields Parkway, and keep bear spray handy on every trail.",
+                            ImageAlt = "Turquoise Moraine Lake below a ring of jagged peaks, seen past pine trees from the rock pile.",
+                            ImageCredit = "Connor Jolley",
+                            ImageCreditUrl = "https://unsplash.com/photos/moraine-lake-and-mountains-in-banff-Y6I4VvyN_sA",
+                            ImagePath = "/images/destinations/banff.webp",
                             Name = "Banff National Park",
                             Rating = 5,
                             RecommendedBy = "Evan",
@@ -139,6 +171,10 @@ namespace Waypoint.Migrations
                             Continent = "North America",
                             Country = "Mexico",
                             Description = "Spend a morning at the National Museum of Anthropology, explore Coyoacan and the Frida Kahlo Museum, and float the canals of Xochimilco on a weekend. Tacos al pastor from a busy stand are a must. The Metro is cheap and fast outside rush hour.",
+                            ImageAlt = "The carved marble arch over the entrance of the Palacio de Bellas Artes, its name spelled out above a sculpted group of figures.",
+                            ImageCredit = "Julio Lopez",
+                            ImageCreditUrl = "https://unsplash.com/photos/a-large-building-with-a-statue-on-top-of-it-2zDXbjtCpFc",
+                            ImagePath = "/images/destinations/mexico-city.webp",
                             Name = "Mexico City",
                             Rating = 4,
                             RecommendedBy = "Kymani",
@@ -154,6 +190,10 @@ namespace Waypoint.Migrations
                             Continent = "Europe",
                             Country = "Iceland",
                             Description = "Use Reykjavik as a hub for the Golden Circle and the South Coast waterfalls. Rent a car if you're comfortable with changing weather, soak in a geothermal pool, and check the aurora forecast on clear winter nights. Groceries save a lot of money here.",
+                            ImageAlt = "A rainbow painted down a wet street in Reykjavik, leading toward the spire of Hallgrimskirkja fading into fog.",
+                            ImageCredit = "NIR HIMI",
+                            ImageCreditUrl = "https://unsplash.com/photos/rainbow-street-leading-to-hallgrimskirkja-reykjavik-IVNLK9yjd1I",
+                            ImagePath = "/images/destinations/reykjavik.webp",
                             Name = "Reykjavik",
                             Rating = 4,
                             RecommendedBy = "Evan",
@@ -169,6 +209,10 @@ namespace Waypoint.Migrations
                             Continent = "Africa",
                             Country = "Morocco",
                             Description = "Get lost in the medina souks, watch Jemaa el-Fnaa come alive at night, and stay in a riad with a courtyard. Agree on taxi fares before you get in, and consider a day trip to the Atlas Mountains or an overnight in the Agafay desert.",
+                            ImageAlt = "A green-framed window with a white iron grille in a pale plaster wall, in a narrow alley of the Marrakech medina.",
+                            ImageCredit = "JR Harris",
+                            ImageCreditUrl = "https://unsplash.com/photos/green-metal-window-frame-on-brown-concrete-building-slWOnYaNYWI",
+                            ImagePath = "/images/destinations/marrakech.webp",
                             Name = "Marrakech",
                             Rating = 4,
                             RecommendedBy = "Riddhi",
@@ -184,6 +228,10 @@ namespace Waypoint.Migrations
                             Continent = "Oceania",
                             Country = "New Zealand",
                             Description = "Bungee jumping started here, but the gondola, the Ben Lomond track, and a day trip to Milford Sound are just as memorable. Fergburger lines are long for a reason. Book adventure activities ahead in peak summer.",
+                            ImageAlt = "Queenstown seen from above, its streets running down to the bays of Lake Wakatipu.",
+                            ImageCredit = "Donald Wu",
+                            ImageCreditUrl = "https://unsplash.com/photos/aerial-view-of-queenstown-and-lake-wakatipu-new-zealand-sU2NHLTnVTI",
+                            ImagePath = "/images/destinations/queenstown.webp",
                             Name = "Queenstown",
                             Rating = 5,
                             RecommendedBy = "Evan",
@@ -199,6 +247,10 @@ namespace Waypoint.Migrations
                             Continent = "South America",
                             Country = "Peru",
                             Description = "Give yourself two days to adjust to the altitude (3,400 m) before hiking. Visit Sacsayhuaman and the Sacred Valley, then take the train or hike the Inca Trail to Machu Picchu. Trail permits sell out months ahead, so book early.",
+                            ImageAlt = "Cusco's Plaza de Armas under storm clouds, with a colonial church on the left and brown Andean hills behind red-tiled roofs.",
+                            ImageCredit = "Sophia Simoes",
+                            ImageCreditUrl = "https://unsplash.com/photos/plaza-de-armas-in-cusco-with-cathedral-and-mountains-pw7eT19wz4c",
+                            ImagePath = "/images/destinations/cusco.webp",
                             Name = "Cusco",
                             Rating = 5,
                             RecommendedBy = "Riddhi",

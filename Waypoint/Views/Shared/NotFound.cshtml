@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Page not found";
+}
+
+<section class="wp-section wp-notfound">
+    <h1>Off the map</h1>
+    <p class="wp-measure">Error 404: we couldn&rsquo;t find that page. If you followed a link to a destination, it may have been renamed.</p>
+    <p class="d-flex flex-wrap gap-3 m-0">
+        <a class="btn btn-accent" asp-controller="Destinations" asp-action="Index">See all destinations</a>
+        <a class="btn btn-quiet" asp-controller="Home" asp-action="Index">Go home</a>
+    </p>
+</section>

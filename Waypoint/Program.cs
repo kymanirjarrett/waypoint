@@ -32,6 +32,9 @@ else
     scope.ServiceProvider.GetRequiredService<WaypointDbContext>().Database.Migrate();
 }
 
+// Empty error responses (like NotFound() for an unknown slug) re-run through a styled page instead of a blank browser 404.
+app.UseStatusCodePagesWithReExecute("/status/{0}");
+
 app.UseHttpsRedirection();
 app.UseRouting();
 

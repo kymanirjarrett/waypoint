@@ -818,6 +818,14 @@ img {
   margin: 0 0 1rem;
 }
 
+.wp-portrait {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
 /* Image placeholders until real photos arrive */
 .img-placeholder {
   display: flex;

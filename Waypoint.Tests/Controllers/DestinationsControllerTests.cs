@@ -53,6 +53,26 @@ public class DestinationsControllerTests : IDisposable
     }
 
     [Fact]
+    public async Task Details_SetsNextDestinationAlphabetically()
+    {
+        var view = Assert.IsType<ViewResult>(await _controller.Details("kyoto"));
+        var next = Assert.IsType<Destination>(view.ViewData["Next"]);
+
+        Assert.Equal("Lisbon", next.Name);
+    }
+
+    [Fact]
+    public async Task Details_LastDestination_WrapsToFirst()
+    {
+        var last = SeedData.Destinations.OrderBy(d => d.Name).Last();
+        var first = SeedData.Destinations.OrderBy(d => d.Name).First();
+
+        var view = Assert.IsType<ViewResult>(await _controller.Details(last.Slug));
+
+        Assert.Equal(first.Slug, Assert.IsType<Destination>(view.ViewData["Next"]).Slug);
+    }
+
+    [Fact]
     public async Task Details_UnknownSlug_ReturnsNotFound() =>
         Assert.IsType<NotFoundResult>(await _controller.Details("atlantis"));
 

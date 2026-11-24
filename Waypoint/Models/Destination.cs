@@ -43,4 +43,20 @@ public class Destination
 
     /// <summary>True if a team member has been there; false if it's on the wish list.</summary>
     public bool Visited { get; set; }
+
+    /// <summary>App-relative path to the photo, e.g. /images/destinations/kyoto.webp.</summary>
+    [Display(Name = "Photo"), StringLength(200)]
+    public string ImagePath { get; set; } = string.Empty;
+
+    /// <summary>Describes what the photo shows, for screen readers.</summary>
+    [Display(Name = "Photo description"), StringLength(300)]
+    public string ImageAlt { get; set; } = string.Empty;
+
+    /// <summary>Photographer name shown under the photo.</summary>
+    [Display(Name = "Photo credit"), StringLength(100)]
+    public string ImageCredit { get; set; } = string.Empty;
+
+    /// <summary>Link to the photo's source page and license.</summary>
+    [Display(Name = "Photo source"), StringLength(300), Url]
+    public string ImageCreditUrl { get; set; } = string.Empty;
 }

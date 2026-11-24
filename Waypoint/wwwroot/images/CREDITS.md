@@ -7,10 +7,10 @@ Files live in `wwwroot/images/destinations/`, cropped to 1600x1067 WebP and kept
 | File | Photographer | Source |
 |---|---|---|
 | `destinations/kyoto.webp` | Stefano Bucciarelli | [Unsplash](https://unsplash.com/photos/thousands-of-vibrant-orange-torii-gates-at-fushimi-inari-shrine-Vu9O6DRGXQU) |
-| `destinations/lisbon.webp` | Jacek Urbanski | [Unsplash](https://unsplash.com/photos/a-yellow-tram-rides-down-a-street-in-lisbon-0sODcpe2RPo) |
 | `destinations/banff.webp` | Connor Jolley | [Unsplash](https://unsplash.com/photos/moraine-lake-and-mountains-in-banff-Y6I4VvyN_sA) |
-| `destinations/mexico-city.webp` | Julio Lopez | [Unsplash](https://unsplash.com/photos/a-large-building-with-a-statue-on-top-of-it-2zDXbjtCpFc) |
+| `destinations/paris.webp` | Howard Walsh | [Unsplash](https://unsplash.com/photos/eiffel-tower-with-boats-on-the-seine-river-nj6rYQh2nvc) |
 | `destinations/reykjavik.webp` | NIR HIMI | [Unsplash](https://unsplash.com/photos/rainbow-street-leading-to-hallgrimskirkja-reykjavik-IVNLK9yjd1I) |
+| `destinations/venice.webp` | Rafael Peier | [Unsplash](https://unsplash.com/photos/venice-canal-with-historic-buildings-boats-and-a-grand-dome--AM_3ESREqQ) |
 | `destinations/marrakech.webp` | JR Harris | [Unsplash](https://unsplash.com/photos/green-metal-window-frame-on-brown-concrete-building-slWOnYaNYWI) |
 | `destinations/queenstown.webp` | Donald Wu | [Unsplash](https://unsplash.com/photos/aerial-view-of-queenstown-and-lake-wakatipu-new-zealand-sU2NHLTnVTI) |
 | `destinations/cusco.webp` | Sophia Simoes | [Unsplash](https://unsplash.com/photos/plaza-de-armas-in-cusco-with-cathedral-and-mountains-pw7eT19wz4c) |

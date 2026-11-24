@@ -2,7 +2,7 @@ using Waypoint.Models;
 
 namespace Waypoint.Data;
 
-/// <summary>Starter rows inserted by the InitialCreate migration (via HasData).</summary>
+/// <summary>Starter rows inserted through HasData. Changing a row needs a new migration.</summary>
 public static class SeedData
 {
     public static readonly Destination[] Destinations =
@@ -14,6 +14,9 @@ public static class SeedData
             Description = "Japan's former capital has more than 1,600 temples and shrines. Walk the torii tunnels at Fushimi Inari early in the morning, rent a bike to reach the Philosopher's Path, and spend an evening in Gion. Buy an IC card for buses and trains, and plan at least three days.",
             BestTimeToVisit = "March-May, October-November", AverageDailyBudgetUsd = 150m, Rating = 5,
             RecommendedBy = "Riddhi", Visited = true,
+            ImagePath = "/images/destinations/kyoto.webp",
+            ImageAlt = "A stone path curving through a tunnel of vermilion torii gates at Fushimi Inari Shrine, with a black lantern hanging on the left.",
+            ImageCredit = "Stefano Bucciarelli", ImageCreditUrl = "https://unsplash.com/photos/thousands-of-vibrant-orange-torii-gates-at-fushimi-inari-shrine-Vu9O6DRGXQU",
         },
         new()
         {
@@ -22,6 +25,9 @@ public static class SeedData
             Description = "Ride Tram 28 through Alfama, catch sunset from a miradouro, and take the train to Sintra for a day of palaces. Lisbon is one of the more affordable capitals in Western Europe, and most of the center is walkable if you don't mind the hills.",
             BestTimeToVisit = "April-June, September-October", AverageDailyBudgetUsd = 110m, Rating = 5,
             RecommendedBy = "Kymani", Visited = true,
+            ImagePath = "/images/destinations/lisbon.webp",
+            ImageAlt = "A yellow tram climbing a steep, busy street in Lisbon between old stone buildings and iron street lamps.",
+            ImageCredit = "Jacek Urbanski", ImageCreditUrl = "https://unsplash.com/photos/a-yellow-tram-rides-down-a-street-in-lisbon-0sODcpe2RPo",
         },
         new()
         {
@@ -30,6 +36,9 @@ public static class SeedData
             Description = "Lake Louise and Moraine Lake are the headliners, but book the Parks Canada shuttle because parking fills by sunrise. Hike to the Lake Agnes Tea House, drive the Icefields Parkway, and keep bear spray handy on every trail.",
             BestTimeToVisit = "June-September", AverageDailyBudgetUsd = 180m, Rating = 5,
             RecommendedBy = "Evan", Visited = true,
+            ImagePath = "/images/destinations/banff.webp",
+            ImageAlt = "Turquoise Moraine Lake below a ring of jagged peaks, seen past pine trees from the rock pile.",
+            ImageCredit = "Connor Jolley", ImageCreditUrl = "https://unsplash.com/photos/moraine-lake-and-mountains-in-banff-Y6I4VvyN_sA",
         },
         new()
         {
@@ -38,6 +47,9 @@ public static class SeedData
             Description = "Spend a morning at the National Museum of Anthropology, explore Coyoacan and the Frida Kahlo Museum, and float the canals of Xochimilco on a weekend. Tacos al pastor from a busy stand are a must. The Metro is cheap and fast outside rush hour.",
             BestTimeToVisit = "March-May", AverageDailyBudgetUsd = 80m, Rating = 4,
             RecommendedBy = "Kymani", Visited = true,
+            ImagePath = "/images/destinations/mexico-city.webp",
+            ImageAlt = "The carved marble arch over the entrance of the Palacio de Bellas Artes, its name spelled out above a sculpted group of figures.",
+            ImageCredit = "Julio Lopez", ImageCreditUrl = "https://unsplash.com/photos/a-large-building-with-a-statue-on-top-of-it-2zDXbjtCpFc",
         },
         new()
         {
@@ -46,6 +58,9 @@ public static class SeedData
             Description = "Use Reykjavik as a hub for the Golden Circle and the South Coast waterfalls. Rent a car if you're comfortable with changing weather, soak in a geothermal pool, and check the aurora forecast on clear winter nights. Groceries save a lot of money here.",
             BestTimeToVisit = "June-August for hiking, October-March for auroras", AverageDailyBudgetUsd = 250m, Rating = 4,
             RecommendedBy = "Evan", Visited = false,
+            ImagePath = "/images/destinations/reykjavik.webp",
+            ImageAlt = "A rainbow painted down a wet street in Reykjavik, leading toward the spire of Hallgrimskirkja fading into fog.",
+            ImageCredit = "NIR HIMI", ImageCreditUrl = "https://unsplash.com/photos/rainbow-street-leading-to-hallgrimskirkja-reykjavik-IVNLK9yjd1I",
         },
         new()
         {
@@ -54,6 +69,9 @@ public static class SeedData
             Description = "Get lost in the medina souks, watch Jemaa el-Fnaa come alive at night, and stay in a riad with a courtyard. Agree on taxi fares before you get in, and consider a day trip to the Atlas Mountains or an overnight in the Agafay desert.",
             BestTimeToVisit = "March-May, September-November", AverageDailyBudgetUsd = 70m, Rating = 4,
             RecommendedBy = "Riddhi", Visited = false,
+            ImagePath = "/images/destinations/marrakech.webp",
+            ImageAlt = "A green-framed window with a white iron grille in a pale plaster wall, in a narrow alley of the Marrakech medina.",
+            ImageCredit = "JR Harris", ImageCreditUrl = "https://unsplash.com/photos/green-metal-window-frame-on-brown-concrete-building-slWOnYaNYWI",
         },
         new()
         {
@@ -62,6 +80,9 @@ public static class SeedData
             Description = "Bungee jumping started here, but the gondola, the Ben Lomond track, and a day trip to Milford Sound are just as memorable. Fergburger lines are long for a reason. Book adventure activities ahead in peak summer.",
             BestTimeToVisit = "December-February, June-August for skiing", AverageDailyBudgetUsd = 170m, Rating = 5,
             RecommendedBy = "Evan", Visited = false,
+            ImagePath = "/images/destinations/queenstown.webp",
+            ImageAlt = "Queenstown seen from above, its streets running down to the bays of Lake Wakatipu.",
+            ImageCredit = "Donald Wu", ImageCreditUrl = "https://unsplash.com/photos/aerial-view-of-queenstown-and-lake-wakatipu-new-zealand-sU2NHLTnVTI",
         },
         new()
         {
@@ -70,6 +91,9 @@ public static class SeedData
             Description = "Give yourself two days to adjust to the altitude (3,400 m) before hiking. Visit Sacsayhuaman and the Sacred Valley, then take the train or hike the Inca Trail to Machu Picchu. Trail permits sell out months ahead, so book early.",
             BestTimeToVisit = "May-September", AverageDailyBudgetUsd = 60m, Rating = 5,
             RecommendedBy = "Riddhi", Visited = false,
+            ImagePath = "/images/destinations/cusco.webp",
+            ImageAlt = "Cusco's Plaza de Armas under storm clouds, with a colonial church on the left and brown Andean hills behind red-tiled roofs.",
+            ImageCredit = "Sophia Simoes", ImageCreditUrl = "https://unsplash.com/photos/plaza-de-armas-in-cusco-with-cathedral-and-mountains-pw7eT19wz4c",
         },
     ];
 }

@@ -1,26 +1,55 @@
 @{
     ViewData["Title"] = "Kymani Jarrett";
+    ViewData["Description"] = "Kymani Jarrett: IT and Cybersecurity student at UC who set up, designed, and deployed Waypoint.";
 }
 
 <header class="page-header">
     <p class="wp-back"><a asp-controller="About" asp-action="Index">Back to the team</a></p>
     <h1>Kymani Jarrett</h1>
+    <p class="lead">Information Technology and Cybersecurity student at the University of Cincinnati &middot; Setup, design &amp; deployment</p>
 </header>
 
 <section class="wp-section">
     <div class="wp-profile">
         <div>
-            <div class="img-placeholder" role="img" aria-label="Photo of Kymani Jarrett (placeholder)">Photo coming soon</div>
+            <img class="wp-portrait" src="~/images/team/kymani.webp" width="720" height="900"
+                 alt="Kymani smiling outdoors on a summer evening, in a peach knit polo and a silver chain, with a lawn and brick buildings behind him." />
         </div>
         <div class="wp-measure">
-            @* TODO(Kymani): personalize this bio, add a photo, and list favorite trips. *@
             <h2>Bio</h2>
-            <p>Hi, I&rsquo;m Kymani, an IT student at the University of Cincinnati and the project lead for Waypoint.</p>
+            <p>
+                I&rsquo;m a fourth-year at UC, double majoring in Information Technology (Software Application Development)
+                and Cybersecurity. I graduate in May 2028.
+            </p>
+            <p>
+                I&rsquo;m originally from Kingston, Jamaica. I like building things end to end, from the database
+                to the page you&rsquo;re reading.
+            </p>
+
+            <h2>My role on Waypoint</h2>
+            <ul>
+                <li>Project setup and the team workflow: feature branches, pull requests into <code>develop</code>, and CI with GitHub Actions</li>
+                <li>The shared layout, navigation, and the site&rsquo;s design system</li>
+                <li>
+                    Deployment to Azure: App Service and Azure SQL, with passwordless database access through a managed identity
+                    and automatic deploys from <code>main</code>
+                </li>
+            </ul>
+
+            <h2>How I travel</h2>
+            <dl>
+                <dt>Travel style</dt>
+                <dd>Planner. Not minute by minute, but I know where I&rsquo;m going and what I want to see. I like places with both city and nature close by.</dd>
+                <dt>Must-pack item</dt>
+                <dd>My MacBook</dd>
+                <dt>Dream destination</dt>
+                <dd><a asp-controller="Destinations" asp-action="Details" asp-route-slug="paris">Paris</a>, with <a asp-controller="Destinations" asp-action="Details" asp-route-slug="venice">Venice</a> right after</dd>
+            </dl>
 
             <h2>Favorite trips</h2>
             <ul>
-                <li>Trip one (TODO)</li>
-                <li>Trip two (TODO)</li>
+                <li><strong>Royalton, Negril, Jamaica</strong> &ndash; my favorite trip so far. The buffet dinner with my family is the night I remember most.</li>
+                <li><strong>Franklyn D. Resort &amp; Spa, Runaway Bay, Jamaica</strong> &ndash; another trip on the north coast.</li>
             </ul>
         </div>
     </div>

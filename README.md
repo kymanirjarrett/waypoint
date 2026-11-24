@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/kymanirjarrett/waypoint/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/kymanirjarrett/waypoint/actions/workflows/ci.yml)
 
+**Live site:** https://waypoint-e0dcgkgub6dpbfdv.westus-01.azurewebsites.net (Azure free tier, so the first visit after a quiet spell can take a few seconds while the app and database wake up).
+
 Waypoint is a travel destination guide built with ASP.NET Core MVC on .NET 10. It's a team project for IT3047C Web Server Application Development at the University of Cincinnati, documenting our shared hobby: travel.
 
 ## Team
@@ -155,10 +157,10 @@ GitHub Actions (main) --OIDC--> Azure App Service F1 (Windows, .NET 10)
                                 Azure SQL Database (free offer, serverless)
 ```
 
-- **Hosting:** Azure App Service Free (F1) on Windows, which now runs 64-bit apps on the free tier. HTTPS only, FTP and basic-auth publishing turned off.
-- **Database:** Azure SQL Database free offer, set to auto-pause until next month when the free limit is reached, so it can never bill. The server uses Microsoft Entra-only authentication: there is no SQL password anywhere.
+- **Hosting:** Azure App Service Free (F1) on Windows in westus, which now runs 64-bit apps on the free tier. HTTPS only, FTP and basic-auth publishing turned off.
+- **Database:** Azure SQL Database free offer in centralus (westus was not accepting new SQL servers), set to auto-pause until next month when the free limit is reached, so it can never bill. The server uses Microsoft Entra-only authentication: there is no SQL password anywhere.
 - **App to database:** the web app's system-assigned managed identity signs in to SQL (`Authentication=Active Directory Default`). Its database user has only `db_datareader` and `db_datawriter`. It cannot change the schema, so a bug or a compromised app cannot drop tables.
-- **Deploys:** every push to `main` runs the `deploy` job after `build` passes. It signs in through OpenID Connect with a user-assigned managed identity whose federated credential trusts only this repo's `production` environment, and whose role is Website Contributor on this one web app. No credentials are stored in GitHub; `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` are identifiers saved as environment variables. A smoke test then requests `/`, `/destinations`, and a detail page and fails the job on anything but 200.
+- **Deploys:** every push to `main` runs the `deploy` job after `build` passes. It signs in through OpenID Connect with a user-assigned managed identity whose federated credential trusts only this repo's `production` environment (GitHub's subject claim includes the immutable owner and repo IDs: `repo:kymanirjarrett@158068087/waypoint@1436177752:environment:production`), and whose role is Website Contributor on this one web app. No credentials are stored in GitHub; `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` are identifiers saved as environment variables. A smoke test then requests `/`, `/destinations`, and a detail page and fails the job on anything but 200.
 - **Connection string:** set in App Service configuration, never in `appsettings*.json`. EF Core retries transient failures because the paused database takes a moment to resume.
 - **Schema changes:** migrations do not run on startup in production. Run them from a signed-in machine with `infra/azure-migrate.sh`, which opens a firewall rule for your IP, applies migrations as the Entra admin, ensures the app's database user, and removes the rule.
 - **Setup from scratch:** `infra/azure-setup.sh` creates every resource with the Azure CLI. A $5 monthly budget alert is the safety net.

@@ -55,10 +55,12 @@ public class DestinationsControllerTests : IDisposable
     [Fact]
     public async Task Details_SetsNextDestinationAlphabetically()
     {
-        var view = Assert.IsType<ViewResult>(await _controller.Details("kyoto"));
+        var byName = SeedData.Destinations.OrderBy(d => d.Name).ToList();
+
+        var view = Assert.IsType<ViewResult>(await _controller.Details(byName[0].Slug));
         var next = Assert.IsType<Destination>(view.ViewData["Next"]);
 
-        Assert.Equal("Lisbon", next.Name);
+        Assert.Equal(byName[1].Name, next.Name);
     }
 
     [Fact]

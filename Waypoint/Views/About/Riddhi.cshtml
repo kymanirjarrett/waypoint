@@ -4,21 +4,19 @@
 
 @* Riddhi: replace every [bracketed blank] with your own details, then delete this comment. *@
 
-<section class="page-header">
-    <div class="container">
-        <p class="mb-1"><a asp-controller="About" asp-action="Index">&larr; Back to the team</a></p>
-        <h1>Riddhi Mahajan</h1>
-        <p class="lead mb-0">[Your major] student at the University of Cincinnati &middot; Destinations &amp; database</p>
-    </div>
-</section>
+<header class="page-header">
+    <p class="wp-back"><a asp-controller="About" asp-action="Index">Back to the team</a></p>
+    <h1>Riddhi Mahajan</h1>
+    <p class="lead">[Your major] student at the University of Cincinnati &middot; Destinations &amp; database</p>
+</header>
 
-<div class="container">
-    <div class="row g-4">
-        <div class="col-md-4">
+<section class="wp-section">
+    <div class="wp-profile">
+        <div>
             <div class="img-placeholder" role="img" aria-label="Photo of Riddhi Mahajan (placeholder)">Photo coming soon</div>
         </div>
-        <div class="col-md-8">
-            <h2 class="h4">Bio</h2>
+        <div class="wp-measure">
+            <h2>Bio</h2>
             <p>
                 Hi, I&rsquo;m Riddhi! I&rsquo;m a [year, e.g. junior] studying [your major] at the University of Cincinnati.
                 I&rsquo;m originally from [your hometown], and I got into traveling because [what got you into travel].
@@ -27,7 +25,7 @@
                 When I&rsquo;m not planning my next trip, I like [a hobby or two]. After graduation, I hope to [career goal].
             </p>
 
-            <h2 class="h4">My role on Waypoint</h2>
+            <h2>My role on Waypoint</h2>
             <p>I built the <a asp-controller="Destinations" asp-action="Index">Destinations</a> section and the database behind it:</p>
             <ul>
                 <li>The <code>Destination</code> model and the SQL Server LocalDB database, created with an Entity Framework Core migration</li>
@@ -37,21 +35,21 @@
                 <li>Unit tests for the Destinations pages</li>
             </ul>
 
-            <h2 class="h4">How I travel</h2>
-            <dl class="row">
-                <dt class="col-sm-4">Travel style</dt>
-                <dd class="col-sm-8">[e.g. city breaks, road trips, backpacking]</dd>
-                <dt class="col-sm-4">Must-pack item</dt>
-                <dd class="col-sm-8">[the one thing you never travel without]</dd>
-                <dt class="col-sm-4">Dream destination</dt>
-                <dd class="col-sm-8">[the place at the top of your list]</dd>
+            <h2>How I travel</h2>
+            <dl>
+                <dt>Travel style</dt>
+                <dd>[e.g. city breaks, road trips, backpacking]</dd>
+                <dt>Must-pack item</dt>
+                <dd>[the one thing you never travel without]</dd>
+                <dt>Dream destination</dt>
+                <dd>[the place at the top of your list]</dd>
             </dl>
 
-            <h2 class="h4">Favorite trips</h2>
+            <h2>Favorite trips</h2>
             <ul>
                 <li><strong>[Place 1]</strong> &ndash; [one sentence on why you loved it]</li>
                 <li><strong>[Place 2]</strong> &ndash; [one sentence on why you loved it]</li>
             </ul>
         </div>
     </div>
-</div>
+</section>

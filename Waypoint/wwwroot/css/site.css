@@ -1,25 +1,77 @@
-/* Waypoint travel theme */
+/* Waypoint design system
+   Palette (contrast checked with the landing-pages palette script, WCAG 2.1):
+   ink on sand 13.27:1, ocean on sand 8.08:1, muted on sand 6.14:1,
+   ink on sunset 7.10:1, sand on ocean 8.08:1, sunset ring on ink 7.10:1, sunset ring on ocean 4.32:1.
+   Sunset on sand is 1.87:1, so sunset is a fill only, never text. */
+
+@font-face {
+  font-family: "Gloock";
+  src: url("../fonts/gloock-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Public Sans";
+  src: url("../fonts/public-sans-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Public Sans";
+  src: url("../fonts/public-sans-italic-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
+  /* Base pair and accent */
+  --wp-sand: #f7f3ec;
   --wp-ink: #1d2a33;
   --wp-ocean: #0b4f6c;
-  --wp-ocean-dark: #083a50;
-  --wp-sand: #f7f3ec;
   --wp-sunset: #f4a259;
-  --wp-sunset-dark: #e08a3c;
+
+  /* Tints and shades of the same hues */
+  --wp-sand-deep: #ece4d6;
+  --wp-ocean-deep: #083a50;
+  --wp-sunset-deep: #e08a3c;
+  --wp-muted: #4f5d66;
+  --wp-on-dark-muted: #c9d6dc;
+  --wp-line: rgba(29, 42, 51, 0.16);
+
+  /* Type roles */
+  --wp-font-display: "Gloock", Georgia, "Times New Roman", serif;
+  --wp-font-body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --wp-step-display: clamp(2.75rem, 1.6rem + 5.2vw, 6.25rem);
+  --wp-step-1: clamp(2rem, 1.4rem + 2.6vw, 3.5rem);
+  --wp-step-2: clamp(1.5rem, 1.25rem + 1.1vw, 2.125rem);
+  --wp-step-3: 1.25rem;
+
+  /* Layout: sections run edge to edge, the gutter keeps text off the edge */
+  --wp-gutter: clamp(16px, 4vw, 64px);
+  --wp-measure: 65ch;
+  --wp-section-y: clamp(3rem, 2rem + 4vw, 6.5rem);
+
+  /* Bootstrap hooks */
+  --bs-body-font-family: var(--wp-font-body);
+  --bs-body-color: var(--wp-ink);
+  --bs-body-bg: var(--wp-sand);
   --bs-link-color: var(--wp-ocean);
-  --bs-link-hover-color: var(--wp-ocean-dark);
   --bs-link-color-rgb: 11, 79, 108;
+  --bs-link-hover-color: var(--wp-ocean-deep);
   --bs-link-hover-color-rgb: 8, 58, 80;
+  --bs-border-color: var(--wp-line);
+  --bs-secondary-color: var(--wp-muted);
+  --bs-emphasis-color: var(--wp-ink);
+  --bs-code-color: var(--wp-ocean-deep); /* Bootstrap's pink would be a fourth hue */
 }
 
 html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+  font-size: 16px;
 }
 
 body {
@@ -27,7 +79,11 @@ body {
   flex-direction: column;
   min-height: 100vh;
   color: var(--wp-ink);
-  background-color: #fff;
+  background-color: var(--wp-sand);
+  font-family: var(--wp-font-body);
+  line-height: 1.6;
+  isolation: isolate;
+  overflow-x: clip;
 }
 
 main {
@@ -38,112 +94,728 @@ main:focus {
   outline: none;
 }
 
-.skip-link {
-  position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
-  z-index: 1080;
-  padding: 0.5rem 1rem;
-  background: #fff;
-  color: var(--wp-ocean);
-  border-radius: 0.25rem;
+h1, h2, h3, .wp-display {
+  font-family: var(--wp-font-display);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
-/* Visible keyboard focus everywhere */
-a:focus-visible,
-button:focus-visible,
-.btn:focus-visible,
-.dropdown-item:focus-visible {
-  outline: 3px solid var(--wp-sunset);
-  outline-offset: 2px;
+h4, h5, h6 {
+  font-family: var(--wp-font-body);
+  font-weight: 700;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Sun-bleached paper texture: one fixed layer behind every page, never over text. */
+.wp-texture {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.35;
+}
+
+/* Focus: ocean ring on light surfaces, sunset ring on dark bands. */
+:focus-visible {
+  outline: 3px solid var(--wp-ocean);
+  outline-offset: 3px;
   box-shadow: none;
 }
 
-/* Navbar */
+.wp-band-dark :focus-visible,
+.site-footer :focus-visible {
+  outline-color: var(--wp-sunset);
+}
+
+.skip-link {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1080;
+  padding: 0.6rem 1rem;
+  background: var(--wp-ink);
+  color: var(--wp-sand);
+  font-weight: 600;
+}
+
+/* ---------- Layout primitives ---------- */
+
+.wp-section {
+  padding: var(--wp-section-y) var(--wp-gutter);
+}
+
+.wp-section--tight {
+  padding-block: calc(var(--wp-section-y) * 0.6);
+}
+
+.wp-measure {
+  max-width: var(--wp-measure);
+}
+
+.wp-title {
+  margin: 0;
+  font-size: var(--wp-step-1);
+}
+
+.wp-rule {
+  border: 0;
+  border-top: 1px solid var(--wp-line);
+  margin: 0;
+  opacity: 1;
+}
+
+/* Page header used on inner pages: full width, title left, intro in its own column. */
+.page-header {
+  display: grid;
+  gap: 1rem 3rem;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: end;
+  padding: clamp(2.5rem, 2rem + 3vw, 5rem) var(--wp-gutter) clamp(1.75rem, 1.5rem + 1.5vw, 3rem);
+  border-bottom: 1px solid var(--wp-line);
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: var(--wp-step-1);
+}
+
+.page-header .lead {
+  max-width: 48ch;
+  margin: 0;
+  color: var(--wp-muted);
+  font-size: 1.125rem;
+}
+
+.page-header .wp-back {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+@media (min-width: 992px) {
+  .page-header {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
+/* ---------- Navigation ---------- */
+
 .site-navbar {
-  background-color: var(--wp-ocean);
+  padding: 0.75rem var(--wp-gutter);
+  background-color: var(--wp-sand);
+  border-bottom: 1px solid var(--wp-line);
+  --bs-navbar-color: var(--wp-ink);
+  --bs-navbar-hover-color: var(--wp-ocean);
+  --bs-navbar-active-color: var(--wp-ink);
+  --bs-navbar-brand-color: var(--wp-ink);
+  --bs-navbar-brand-hover-color: var(--wp-ocean);
+  --bs-navbar-toggler-border-color: var(--wp-line);
+}
+
+.site-navbar .navbar-brand {
+  font-family: var(--wp-font-display);
+  font-size: 1.625rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
 }
 
 .site-navbar .nav-link {
-  color: rgba(255, 255, 255, 0.9);
+  position: relative;
+  padding-inline: 0.85rem;
+  font-weight: 500;
 }
 
-.site-navbar .nav-link:hover,
-.site-navbar .nav-link:focus {
-  color: #fff;
+.site-navbar .nav-link[aria-current="page"],
+.site-navbar .nav-link.active {
+  font-weight: 700;
 }
 
-/* Hero */
-.hero {
-  padding: 5rem 0 4rem;
-  margin-bottom: 3rem;
-  color: #fff;
-  background: linear-gradient(135deg, var(--wp-ocean) 0%, #13708f 60%, #2a8c9e 100%);
+@media (min-width: 768px) {
+  .site-navbar .nav-link[aria-current="page"]::after,
+  .site-navbar .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0.85rem;
+    right: 0.85rem;
+    bottom: -0.8rem;
+    height: 3px;
+    background: var(--wp-ocean);
+  }
 }
 
-.hero .lead {
-  max-width: 40rem;
-  color: rgba(255, 255, 255, 0.92);
+@media (max-width: 767.98px) {
+  .site-navbar .nav-link[aria-current="page"],
+  .site-navbar .nav-link.active {
+    box-shadow: inset 3px 0 0 var(--wp-ocean);
+  }
 }
 
-/* Page header used on inner pages */
-.page-header {
-  padding: 2.5rem 0 2rem;
-  margin-bottom: 2rem;
-  background-color: var(--wp-sand);
-  border-bottom: 1px solid #e8e1d4;
+.dropdown-menu {
+  --bs-dropdown-bg: var(--wp-sand);
+  --bs-dropdown-border-color: var(--wp-line);
+  --bs-dropdown-link-color: var(--wp-ink);
+  --bs-dropdown-link-hover-bg: var(--wp-sand-deep);
+  --bs-dropdown-link-active-bg: var(--wp-ocean);
+  --bs-dropdown-link-active-color: var(--wp-sand);
+  border-radius: 0;
+  box-shadow: 0 0.75rem 2rem rgba(29, 42, 51, 0.12);
 }
 
-/* Buttons */
+/* ---------- Buttons ---------- */
+
+.btn {
+  --bs-btn-border-radius: 0;
+  --bs-btn-font-weight: 700;
+  --bs-btn-padding-x: 1.35rem;
+  --bs-btn-padding-y: 0.75rem;
+}
+
+/* The one accent element per screen: sunset fill, ink label (7.10:1). */
 .btn-accent {
   --bs-btn-color: var(--wp-ink);
   --bs-btn-bg: var(--wp-sunset);
   --bs-btn-border-color: var(--wp-sunset);
   --bs-btn-hover-color: var(--wp-ink);
-  --bs-btn-hover-bg: var(--wp-sunset-dark);
-  --bs-btn-hover-border-color: var(--wp-sunset-dark);
+  --bs-btn-hover-bg: var(--wp-sunset-deep);
+  --bs-btn-hover-border-color: var(--wp-sunset-deep);
   --bs-btn-active-color: var(--wp-ink);
-  --bs-btn-active-bg: var(--wp-sunset-dark);
-  --bs-btn-active-border-color: var(--wp-sunset-dark);
-  font-weight: 600;
+  --bs-btn-active-bg: var(--wp-sunset-deep);
+  --bs-btn-active-border-color: var(--wp-sunset-deep);
 }
 
-/* Cards */
-.wp-card {
-  border: 1px solid #e6e1d8;
-  border-top: 4px solid var(--wp-sunset);
-  border-radius: 0.5rem;
-  box-shadow: 0 0.25rem 0.75rem rgba(29, 42, 51, 0.06);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+.btn-quiet {
+  --bs-btn-color: var(--wp-ink);
+  --bs-btn-border-color: var(--wp-ink);
+  --bs-btn-hover-color: var(--wp-sand);
+  --bs-btn-hover-bg: var(--wp-ink);
+  --bs-btn-hover-border-color: var(--wp-ink);
+  --bs-btn-active-color: var(--wp-sand);
+  --bs-btn-active-bg: var(--wp-ink);
 }
 
-.wp-card:hover,
-.wp-card:focus-within {
-  transform: translateY(-2px);
-  box-shadow: 0 0.5rem 1.25rem rgba(29, 42, 51, 0.12);
+.wp-arrow-link {
+  font-weight: 700;
+  text-decoration: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .wp-card {
-    transition: none;
+.wp-arrow-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Home hero ---------- */
+
+.wp-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  overflow: clip; /* the photo bleeds, the page never scrolls sideways */
+}
+
+.wp-hero__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: clamp(2.5rem, 2rem + 4vw, 6rem) var(--wp-gutter);
+}
+
+.wp-hero__text h1 {
+  margin: 0;
+  font-size: var(--wp-step-display);
+  line-height: 0.95;
+}
+
+.wp-hero__text .lead {
+  max-width: 34ch;
+  margin: 0;
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+}
+
+.wp-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.75rem;
+}
+
+.wp-hero__photo {
+  position: relative;
+  margin: 0;
+  min-height: 60vw;
+}
+
+.wp-hero__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wp-hero__photo figcaption,
+.wp-photo-credit {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0.35rem 0.75rem;
+  background: var(--wp-ink);
+  color: var(--wp-sand);
+  font-size: 0.8125rem;
+}
+
+.wp-hero__photo figcaption a,
+.wp-photo-credit a {
+  color: var(--wp-sand);
+}
+
+@media (min-width: 992px) {
+  .wp-hero {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    min-height: min(88svh, 860px);
   }
 
-  .wp-card:hover,
-  .wp-card:focus-within {
-    transform: none;
+  .wp-hero__text {
+    padding-right: 3rem;
+  }
+
+  .wp-hero__photo {
+    min-height: 0;
+    /* runs past the right edge of the viewport; the section clips it */
+    margin-right: -6vw;
+  }
+
+  .wp-hero__photo figcaption {
+    right: 6vw;
   }
 }
 
-/* Destinations */
+/* ---------- Waypoint markers: the signature element ---------- */
+
+/* A stop on a dashed route. Filled sunset = visited, open ink ring = wish list.
+   The visible "Visited" / "Wish list" text carries the meaning; the marker repeats it. */
+.wp-stop {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+}
+
+.wp-stop--visited {
+  background: var(--wp-sunset);
+  box-shadow: inset 0 0 0 2px var(--wp-ink);
+}
+
+.wp-stop--wish {
+  border: 2px solid var(--wp-ink);
+}
+
+.wp-route {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.wp-route::after {
+  content: "";
+  flex: 1;
+  border-top: 2px dashed var(--wp-line);
+}
+
+/* ---------- Destination cards ---------- */
+
+.wp-grid {
+  display: grid;
+  gap: clamp(2rem, 1.5rem + 2vw, 3.5rem) clamp(1.25rem, 1rem + 1.5vw, 2.5rem);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+}
+
+.wp-place {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.wp-place__photo {
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  object-fit: cover;
+  background: var(--wp-sand-deep);
+  transition: filter 0.2s ease;
+}
+
+.wp-place:hover .wp-place__photo,
+.wp-place:focus-within .wp-place__photo {
+  filter: saturate(1.15) contrast(1.05);
+}
+
+.wp-place h2,
+.wp-place h3 {
+  margin: 0;
+  font-size: var(--wp-step-2);
+}
+
+.wp-place h2 a,
+.wp-place h3 a {
+  color: var(--wp-ink);
+  text-decoration: none;
+}
+
+/* Whole card is the link target; the heading link carries the name. */
+.wp-place h2 a::after,
+.wp-place h3 a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.wp-place:hover h2 a,
+.wp-place:hover h3 a {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+.wp-place__meta {
+  margin: 0;
+  color: var(--wp-muted);
+  font-size: 0.9375rem;
+}
+
+.wp-place__summary {
+  margin: 0;
+}
+
+.wp-place__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin: auto 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--wp-line);
+  font-size: 0.9375rem;
+}
+
+.wp-status {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .rating {
-  color: var(--wp-sunset-dark);
-  letter-spacing: 0.05em;
+  color: var(--wp-ink);
+  letter-spacing: 0.08em;
 }
 
-.continent-filter {
-  --bs-nav-pills-link-active-bg: var(--wp-ocean);
-  --bs-nav-link-color: var(--wp-ocean);
-  --bs-nav-link-hover-color: var(--wp-ocean-dark);
+/* Continent filter as plain underlined tabs */
+.wp-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wp-tabs a {
+  display: inline-block;
+  padding: 0.35rem 0;
+  color: var(--wp-ink);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+
+.wp-tabs a:hover {
+  border-bottom-color: var(--wp-line);
+}
+
+.wp-tabs a[aria-current="page"] {
+  font-weight: 700;
+  border-bottom-color: var(--wp-ocean);
+}
+
+.wp-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: clamp(2rem, 1.5rem + 2vw, 3rem);
+}
+
+/* ---------- Destination detail ---------- */
+
+.wp-feature-photo {
+  position: relative;
+  margin: 0;
+  height: clamp(320px, 62svh, 720px);
+  overflow: clip;
+}
+
+.wp-feature-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wp-detail {
+  display: grid;
+  gap: 3rem clamp(2rem, 1rem + 4vw, 6rem);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 992px) {
+  .wp-detail {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  }
+}
+
+.wp-detail__lead {
+  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  line-height: 1.45;
+}
+
+.wp-facts {
+  align-self: start;
+  position: sticky;
+  top: 1.5rem;
+  padding: clamp(1.5rem, 1.25rem + 1vw, 2.25rem);
+  background: var(--wp-sand-deep);
+}
+
+.wp-next {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--wp-line);
+  font-weight: 700;
+}
+
+.wp-facts h2 {
+  margin: 0 0 1.25rem;
+  font-size: var(--wp-step-3);
+  font-family: var(--wp-font-body);
+  font-weight: 700;
+}
+
+.wp-facts dl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+}
+
+.wp-facts dl > div {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--wp-line);
+}
+
+.wp-facts dt {
+  color: var(--wp-muted);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wp-facts dd {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+/* ---------- Data table ---------- */
+
+.wp-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--wp-line);
+  /* Scroll cue: shadows appear at an edge only while more columns are hidden past it. */
+  background:
+    linear-gradient(to right, var(--wp-sand) 30%, rgba(247, 243, 236, 0)) left / 2.5rem 100% no-repeat local,
+    linear-gradient(to left, var(--wp-sand) 30%, rgba(247, 243, 236, 0)) right / 2.5rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(29, 42, 51, 0.22), transparent) left / 0.9rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(29, 42, 51, 0.22), transparent) right / 0.9rem 100% no-repeat scroll;
+}
+
+.wp-table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--wp-ink);
+  --bs-table-striped-bg: rgba(29, 42, 51, 0.035);
+  --bs-table-hover-bg: var(--wp-sand-deep);
+  --bs-table-border-color: var(--wp-line);
+  margin: 0;
+  min-width: 960px;
+  font-variant-numeric: tabular-nums;
+}
+
+.wp-table caption {
+  padding: 0.85rem 1rem;
+  color: var(--wp-muted);
+  caption-side: top;
+}
+
+.wp-table thead th {
+  background: var(--wp-ink);
+  color: var(--wp-sand);
+  font-weight: 700;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+.wp-table thead a {
+  color: var(--wp-sand);
+}
+
+.wp-table thead :focus-visible {
+  outline-color: var(--wp-sunset);
+}
+
+.wp-table th[aria-sort] a::after {
+  content: "";
+  display: inline-block;
+  margin-left: 0.4em;
+  vertical-align: middle;
+  border-inline: 0.3em solid transparent;
+  border-top: 0.4em solid currentColor; /* descending: points down */
+}
+
+.wp-table th[aria-sort="ascending"] a::after {
+  border-top: 0;
+  border-bottom: 0.4em solid currentColor;
+}
+
+/* ---------- Dark band (home teasers) ---------- */
+
+.wp-band-dark {
+  background: var(--wp-ocean);
+  color: var(--wp-sand);
+}
+
+.wp-band-dark a {
+  color: var(--wp-sand);
+}
+
+.wp-split {
+  display: grid;
+  gap: 2.5rem clamp(2rem, 1rem + 4vw, 6rem);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 768px) {
+  .wp-split {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.wp-split h2 {
+  margin: 0 0 0.75rem;
+  font-size: var(--wp-step-2);
+}
+
+.wp-split p {
+  max-width: 44ch;
+}
+
+/* ---------- People (About) ---------- */
+
+.wp-people {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wp-people li {
+  position: relative;
+  display: grid;
+  gap: 0.25rem 2rem;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 1.75rem 0;
+  border-top: 1px solid var(--wp-line);
+}
+
+.wp-people li:last-child {
+  border-bottom: 1px solid var(--wp-line);
+}
+
+@media (min-width: 768px) {
+  .wp-people li {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr) 10rem;
+    align-items: baseline;
+  }
+}
+
+.wp-people h2 {
+  margin: 0;
+  font-size: var(--wp-step-2);
+}
+
+.wp-people p {
+  margin: 0;
+}
+
+.wp-people a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.wp-profile {
+  display: grid;
+  gap: 2.5rem clamp(2rem, 1rem + 4vw, 6rem);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 992px) {
+  .wp-profile {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  }
+}
+
+.wp-profile h2 {
+  margin: 2.5rem 0 0.85rem;
+  font-size: var(--wp-step-2);
+}
+
+.wp-profile h2:first-child {
+  margin-top: 0;
+}
+
+.wp-profile dl {
+  margin: 0;
+}
+
+.wp-profile dt {
+  color: var(--wp-muted);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wp-profile dd {
+  margin: 0 0 1rem;
 }
 
 /* Image placeholders until real photos arrive */
@@ -151,22 +823,135 @@ button:focus-visible,
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 4 / 3;
-  background-color: var(--wp-sand);
-  color: #5c6770;
-  border: 2px dashed #d6cdbd;
-  border-radius: 0.5rem;
-  font-size: 0.9rem;
+  aspect-ratio: 4 / 5;
+  max-width: 320px;
+  background-color: var(--wp-sand-deep);
+  color: var(--wp-muted);
+  border: 1px dashed rgba(29, 42, 51, 0.35);
+  font-size: 0.9375rem;
 }
 
-/* Footer */
+/* ---------- Gallery and Tips partials ---------- */
+
+.wp-photo-grid {
+  display: grid;
+  gap: clamp(1rem, 0.75rem + 1vw, 2rem);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wp-photo-grid figure {
+  margin: 0;
+}
+
+.wp-photo-grid img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--wp-sand-deep);
+}
+
+.wp-photo-grid figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+}
+
+.wp-photo-grid .wp-credit {
+  display: block;
+  color: var(--wp-muted);
+  font-size: 0.8125rem;
+}
+
+.wp-tip {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--wp-line);
+}
+
+.wp-tip h3 {
+  margin: 0 0 0.5rem;
+  font-family: var(--wp-font-body);
+  font-size: var(--wp-step-3);
+  font-weight: 700;
+}
+
+.wp-tip p {
+  max-width: var(--wp-measure);
+  margin: 0;
+}
+
+.wp-empty {
+  max-width: 44ch;
+  margin: 0;
+  color: var(--wp-muted);
+  font-size: 1.125rem;
+}
+
+/* ---------- Not found ---------- */
+
+.wp-notfound {
+  display: grid;
+  gap: 1.25rem;
+  align-content: center;
+  min-height: 55svh;
+}
+
+.wp-notfound h1 {
+  margin: 0;
+  font-size: var(--wp-step-display);
+}
+
+/* ---------- Footer ---------- */
+
 .site-footer {
   flex-shrink: 0;
-  color: #e9eef1;
+  display: grid;
+  gap: 1.5rem 3rem;
+  grid-template-columns: minmax(0, 1fr);
+  padding: clamp(2.5rem, 2rem + 2vw, 4rem) var(--wp-gutter);
   background-color: var(--wp-ink);
-  font-size: 0.9rem;
+  color: var(--wp-on-dark-muted);
+  font-size: 0.9375rem;
+}
+
+@media (min-width: 768px) {
+  .site-footer {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: end;
+  }
+}
+
+.site-footer .wp-footer-brand {
+  margin: 0 0 0.5rem;
+  color: var(--wp-sand);
+  font-family: var(--wp-font-display);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
 }
 
 .site-footer a {
-  color: #fff;
+  color: var(--wp-sand);
+}
+
+/* ---------- Motion ---------- */
+
+/* The only motion is the photo hover. With reduced motion the color change still happens, just without the fade. */
+@media (prefers-reduced-motion: reduce) {
+  .wp-place__photo {
+    transition: none;
+  }
 }

@@ -2,41 +2,27 @@
     ViewData["Title"] = "About Us";
 }
 
-<section class="page-header">
-    <div class="container">
-        <h1>About Us</h1>
-        <p class="lead mb-0">Waypoint is built by three UC students who would rather be somewhere else, preferably with a passport stamp.</p>
-    </div>
-</section>
+<header class="page-header">
+    <h1>About Us</h1>
+    <p class="lead">Waypoint is built by three UC students who would rather be somewhere else, preferably with a passport stamp.</p>
+</header>
 
-<div class="container">
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card h-100 wp-card">
-                <div class="card-body">
-                    <h2 class="h5 card-title">Kymani Jarrett</h2>
-                    <p class="card-text">Project lead and repo owner.</p>
-                    <a class="stretched-link" asp-controller="About" asp-action="Kymani">Meet Kymani</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 wp-card">
-                <div class="card-body">
-                    <h2 class="h5 card-title">Riddhi Mahajan</h2>
-                    <p class="card-text">Team member.</p>
-                    <a class="stretched-link" asp-controller="About" asp-action="Riddhi">Meet Riddhi</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 wp-card">
-                <div class="card-body">
-                    <h2 class="h5 card-title">Evan Schmidt</h2>
-                    <p class="card-text">Team member.</p>
-                    <a class="stretched-link" asp-controller="About" asp-action="Evan">Meet Evan</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<section class="wp-section">
+    <ul class="wp-people">
+        <li>
+            <h2>Kymani Jarrett</h2>
+            <p>Project lead and repo owner.</p>
+            <a class="wp-arrow-link" asp-controller="About" asp-action="Kymani">Meet Kymani</a>
+        </li>
+        <li>
+            <h2>Riddhi Mahajan</h2>
+            <p>Team member.</p>
+            <a class="wp-arrow-link" asp-controller="About" asp-action="Riddhi">Meet Riddhi</a>
+        </li>
+        <li>
+            <h2>Evan Schmidt</h2>
+            <p>Team member.</p>
+            <a class="wp-arrow-link" asp-controller="About" asp-action="Evan">Meet Evan</a>
+        </li>
+    </ul>
+</section>

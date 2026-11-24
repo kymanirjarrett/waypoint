@@ -32,6 +32,15 @@ Commits, PR titles and bodies, README, and code comments carry no AI attribution
 - Destinations data (`Data/SeedData.cs`) is Riddhi's. Ask before changing her rows.
 - Restyling someone else's page (markup, classes, shared partials) is fine. Changing their words is not.
 
+## Design system
+
+- Tokens live at the top of `Waypoint/wwwroot/css/site.css`. Use them, not raw hex values.
+- Sunset (`--wp-sunset`) is a fill only, never text: it is 1.87:1 on sand. Ink text on a sunset fill is 7.10:1.
+- At most one accent element per screen. No accent-colored words in headlines.
+- Layouts run full width with `--wp-gutter`. No content trapped in a centered fixed-width column; limit line length inside grids (`.wp-measure`).
+- Stay on Bootstrap 5 + jQuery. No new frameworks or build step. Fonts are self-hosted in `wwwroot/fonts`.
+- Check contrast with the landing-pages palette script before adding a color pairing.
+
 ## Rubric items that must not break
 
 - LocalDB connection string `WaypointDb` in `Waypoint/appsettings.json`

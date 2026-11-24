@@ -1,0 +1,7 @@
+@model bool
+@* Route marker for a destination card. Model is Destination.Visited: filled stop = been there, open ring = wish list. *@
+
+<div class="wp-route">
+    <span class="wp-stop @(Model ? "wp-stop--visited" : "wp-stop--wish")" aria-hidden="true"></span>
+    <span class="wp-status">@(Model ? "Visited" : "Wish list")</span>
+</div>

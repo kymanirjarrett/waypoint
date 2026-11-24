@@ -1,64 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
+@{
+    var controller = ViewContext.RouteData.Values["controller"] as string;
+    var action = ViewContext.RouteData.Values["action"] as string;
+    // aria-current="page" marks the active nav item; the stylesheet draws the underline from it.
+    string? Current(string c, string? a = null) =>
+        string.Equals(c, controller, StringComparison.OrdinalIgnoreCase)
+        && (a is null || string.Equals(a, action, StringComparison.OrdinalIgnoreCase)) ? "page" : null;
+}
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Waypoint</title>
+    <meta name="description" content="@(ViewData["Description"] as string ?? "Destinations, photos, and travel tips from three University of Cincinnati students.")" />
+    <link rel="preload" href="~/fonts/gloock-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="~/fonts/public-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Waypoint.styles.css" asp-append-version="true" />
 </head>
 <body>
+    @* Sun-bleached paper texture (landing-pages preset). Static, behind all content. *@
+    <svg class="wp-texture" aria-hidden="true" focusable="false">
+        <defs>
+            <filter id="tx-paper" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.0045" numOctaves="4" seed="9" stitchTiles="stitch" result="mottle" />
+                <feColorMatrix in="mottle" type="matrix" result="mottleT"
+                               values="0 0 0 0 0.55  0 0 0 0 0.47  0 0 0 0 0.33  0.7 0 0 0 -0.28" />
+                <feTurbulence type="fractalNoise" baseFrequency="0.55 0.07" numOctaves="2" seed="4" stitchTiles="stitch" result="fiber" />
+                <feColorMatrix in="fiber" type="matrix" result="fiberT"
+                               values="0 0 0 0 0.45  0 0 0 0 0.40  0 0 0 0 0.31  0.9 0 0 0 -0.38" />
+                <feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="1" seed="1" stitchTiles="stitch" result="tooth" />
+                <feColorMatrix in="tooth" type="matrix" result="toothT"
+                               values="0 0 0 0 0.40  0 0 0 0 0.36  0 0 0 0 0.30  0.6 0 0 0 -0.22" />
+                <feMerge><feMergeNode in="mottleT" /><feMergeNode in="fiberT" /><feMergeNode in="toothT" /></feMerge>
+            </filter>
+        </defs>
+        <rect width="100%" height="100%" filter="url(#tx-paper)" />
+    </svg>
+
     <a class="visually-hidden-focusable skip-link" href="#main-content">Skip to main content</a>
     <header>
-        <nav class="navbar navbar-expand-md navbar-dark site-navbar" aria-label="Main navigation">
-            <div class="container">
-                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">Waypoint</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="mainNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Destinations" asp-action="Index">Destinations</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Gallery">Gallery</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Tips">Travel Tips</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                About Us
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="aboutDropdown">
-                                <li><a class="dropdown-item" asp-controller="About" asp-action="Index">Team overview</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" asp-controller="About" asp-action="Kymani">Kymani</a></li>
-                                <li><a class="dropdown-item" asp-controller="About" asp-action="Riddhi">Riddhi</a></li>
-                                <li><a class="dropdown-item" asp-controller="About" asp-action="Evan">Evan</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+        <nav class="navbar navbar-expand-md site-navbar" aria-label="Main navigation">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">Waypoint</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="@Current("Home", "Index")" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="@Current("Destinations")" asp-controller="Destinations" asp-action="Index">Destinations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="@Current("Home", "Gallery")" asp-controller="Home" asp-action="Gallery">Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="@Current("Home", "Tips")" asp-controller="Home" asp-action="Tips">Travel Tips</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle @(Current("About") is null ? "" : "active")" href="#" id="aboutDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">About Us</a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="aboutDropdown">
+                            <li><a class="dropdown-item" aria-current="@Current("About", "Index")" asp-controller="About" asp-action="Index">Team overview</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" aria-current="@Current("About", "Kymani")" asp-controller="About" asp-action="Kymani">Kymani</a></li>
+                            <li><a class="dropdown-item" aria-current="@Current("About", "Riddhi")" asp-controller="About" asp-action="Riddhi">Riddhi</a></li>
+                            <li><a class="dropdown-item" aria-current="@Current("About", "Evan")" asp-controller="About" asp-action="Evan">Evan</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </nav>
     </header>
 
-    <main id="main-content" class="pb-4" tabindex="-1">
+    <main id="main-content" tabindex="-1">
         @RenderBody()
     </main>
 
     <footer class="site-footer">
-        <div class="container py-3">
-            Waypoint &middot; IT3047C &middot; University of Cincinnati &middot; &copy; @DateTime.Now.Year
-            &middot; <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div>
+            <p class="wp-footer-brand">Waypoint</p>
+            <p>A travel guide by three students for IT3047C at the University of Cincinnati.</p>
+        </div>
+        <div>
+            <ul>
+                <li><a asp-controller="Destinations" asp-action="Index">Destinations</a></li>
+                <li><a asp-controller="Destinations" asp-action="Table">Data table</a></li>
+                <li><a asp-controller="Home" asp-action="Gallery">Gallery</a></li>
+                <li><a asp-controller="Home" asp-action="Tips">Travel Tips</a></li>
+                <li><a asp-controller="About" asp-action="Index">About Us</a></li>
+                <li><a asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+            </ul>
+            <p>Destination photos from Unsplash, credited on each page. &copy; @DateTime.Now.Year</p>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

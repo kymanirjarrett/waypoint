@@ -33,13 +33,13 @@ All routes use attribute routing (`[Route]` on each action) and lowercase URLs.
 | `/privacy` | Privacy | `HomeController.Privacy` | Done |
 | `/about` | About Us (team overview) | `AboutController.Index` | Done |
 | `/about/kymani` | Kymani's page | `AboutController.Kymani` | Placeholder |
-| `/about/riddhi` | Riddhi's page | `AboutController.Riddhi` | Placeholder |
+| `/about/riddhi` | Riddhi's page | `AboutController.Riddhi` | In progress |
 | `/about/evan` | Evan's page | `AboutController.Evan` | Placeholder |
 | `/destinations` | Destination card grid, filterable by `?continent=` | `DestinationsController.Index` | Done |
 | `/destinations/table` | All database rows in a sortable HTML table (`?sort=`) | `DestinationsController.Table` | Done |
 | `/destinations/{slug}` | Destination detail (404 for unknown slugs) | `DestinationsController.Details` | Done |
-| `/gallery` | Gallery | `HomeController.Gallery` | Planned (Evan) |
-| `/tips` | Travel Tips | `HomeController.Tips` | Planned (Evan) |
+| `/gallery` | Gallery | `HomeController.Gallery` | Stub: heading only, no `[Route]` yet so it 404s (Evan, #6) |
+| `/tips` | Travel Tips | `HomeController.Tips` | Stub: heading only, no `[Route]` yet so it 404s (Evan, #6) |
 
 ## Running locally
 

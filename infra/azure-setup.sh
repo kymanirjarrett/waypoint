@@ -53,10 +53,12 @@ az webapp config connection-string set -g "$RG" -n "$APP" -t SQLAzure --settings
 az webapp config appsettings set -g "$RG" -n "$APP" --settings ASPNETCORE_ENVIRONMENT=Production
 
 # --- 5. Deploy identity: user-assigned MI trusted for this repo's production environment only ---
+# GitHub's OIDC subject now embeds immutable owner and repo IDs: repo:<owner>@<ownerId>/<repo>@<repoId>:environment:<env>
+OIDC_SUBJECT=$(gh api "repos/$REPO" --jq '"repo:\(.owner.login)@\(.owner.id)/\(.name)@\(.id):environment:production"')
 az identity create -g "$RG" -n "$DEPLOY_ID" -l "$LOC"
 az identity federated-credential create -g "$RG" --identity-name "$DEPLOY_ID" -n github-production \
   --issuer https://token.actions.githubusercontent.com \
-  --subject "repo:$REPO:environment:production" --audiences api://AzureADTokenExchange
+  --subject "$OIDC_SUBJECT" --audiences api://AzureADTokenExchange
 az role assignment create --role "Website Contributor" \
   --assignee-object-id "$(az identity show -g "$RG" -n "$DEPLOY_ID" --query principalId -o tsv)" \
   --assignee-principal-type ServicePrincipal \

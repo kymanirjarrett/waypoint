@@ -10,7 +10,7 @@ Waypoint is a travel destination guide built with ASP.NET Core MVC on .NET 10. I
 |---|---|---|
 | Kymani Jarrett | [@kymanirjarrett](https://github.com/kymanirjarrett) | Project setup, layout and navigation, About pages, CI |
 | Riddhi Mahajan | [@riddhuu](https://github.com/riddhuu) | Destinations (list, detail pages, slug routing) |
-| Evan Schmidt | TBD | Gallery and Travel Tips |
+| Evan Schmidt | [@schmidev](https://github.com/schmidev) | Gallery and Travel Tips |
 
 Everyone owns their own About page (`Views/About/<Name>.cshtml`).
 
@@ -38,8 +38,8 @@ All routes use attribute routing (`[Route]` on each action) and lowercase URLs.
 | `/destinations` | Destination card grid, filterable by `?continent=` | `DestinationsController.Index` | Done |
 | `/destinations/table` | All database rows in a sortable HTML table (`?sort=`) | `DestinationsController.Table` | Done |
 | `/destinations/{slug}` | Destination detail (404 for unknown slugs) | `DestinationsController.Details` | Done |
-| `/gallery` | Gallery | `HomeController.Gallery` | Stub: heading only, no `[Route]` yet so it 404s (Evan, #6) |
-| `/tips` | Travel Tips | `HomeController.Tips` | Stub: heading only, no `[Route]` yet so it 404s (Evan, #6) |
+| `/gallery` | Gallery | `HomeController.Gallery` | Page shell and photo-grid partial ready; content in progress (Evan, #6) |
+| `/tips` | Travel Tips | `HomeController.Tips` | Page shell and tip partial ready; content in progress (Evan, #6) |
 
 ## Running locally
 
@@ -89,6 +89,36 @@ Seed rows live in `Waypoint/Data/SeedData.cs`. After changing them, add a new mi
 ```bash
 dotnet test
 ```
+
+## Gallery and Tips partials
+
+Both pages already have their route, header, and layout. Content goes in through two shared partials so it matches the rest of the site.
+
+**Gallery** (`Views/Home/Gallery.cshtml`): put images in `wwwroot/images/gallery/` (WebP, about 1600 px wide, under 300 KB), build a list of `GalleryPhoto`, and render the grid:
+
+```cshtml
+@{
+    var photos = new List<GalleryPhoto>
+    {
+        new("/images/gallery/hilton-head-pier.webp", "Wooden pier over calm water at sunrise", "Hilton Head Island, 2024"),
+        new("/images/gallery/kyoto-lanterns.webp", "Paper lanterns over a narrow street", "Kyoto", "Photographer Name", "https://unsplash.com/photos/..."),
+    };
+}
+<partial name="_PhotoGrid" model="photos" />
+```
+
+`GalleryPhoto(Src, Alt, Caption, Credit?, CreditUrl?)`: alt text describes the scene for screen readers; leave the credit empty for your own photos, and fill both credit fields for stock photos (and add them to `wwwroot/images/CREDITS.md`).
+
+**Tips** (`Views/Home/Tips.cshtml`): one heading per topic, one `_TipCard` per tip:
+
+```cshtml
+<h2 class="wp-title">Packing</h2>
+<partial name="_TipCard" model='new Tip("Roll, don't fold", "Rolled clothes take less space and wrinkle less.")' />
+```
+
+## Design system
+
+Tokens live at the top of `wwwroot/css/site.css`: sand (background), ink (text), ocean (links, focus, active states), and sunset (fills only: the primary button and the stop markers). Sunset is never used as text because it fails contrast on sand (1.87:1). Display type is Gloock, body is Public Sans, both self-hosted in `wwwroot/fonts`. Sections run full width with `--wp-gutter` padding; text width is limited inside grids, not by a centered page column.
 
 ## Branching workflow
 

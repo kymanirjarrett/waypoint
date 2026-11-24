@@ -1,0 +1,7 @@
+@model Tip
+@* One tip. Usage: <partial name="_TipCard" model='new Tip("Title", "Body text")' /> *@
+
+<article class="wp-tip">
+    <h3>@Model.Title</h3>
+    <p>@Model.Body</p>
+</article>

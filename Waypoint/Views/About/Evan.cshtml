@@ -2,28 +2,26 @@
     ViewData["Title"] = "Evan Schmidt";
 }
 
-<section class="page-header">
-    <div class="container">
-        <p class="mb-1"><a asp-controller="About" asp-action="Index">&larr; Back to the team</a></p>
-        <h1>Evan Schmidt</h1>
-    </div>
-</section>
+<header class="page-header">
+    <p class="wp-back"><a asp-controller="About" asp-action="Index">Back to the team</a></p>
+    <h1>Evan Schmidt</h1>
+</header>
 
-<div class="container">
-    <div class="row g-4">
-        <div class="col-md-4">
+<section class="wp-section">
+    <div class="wp-profile">
+        <div>
             <div class="img-placeholder" role="img" aria-label="Photo of Evan Schmidt (placeholder)">Photo coming soon</div>
         </div>
-        <div class="col-md-8">
-            <h2 class="h4">Bio</h2>
+        <div class="wp-measure">
+            <h2>Bio</h2>
             <p>I&rsquo;m an IT student at UC and a team member of this project.
                 I&rsquo;m in charge of the gallery and travel tips sections of this project</p>
 
-            <h2 class="h4">Favorite trips</h2>
+            <h2>Favorite trips</h2>
             <ul>
                 <li>Hilton Head Island, South Carolina</li>
                 <li>Disneyland</li>
             </ul>
         </div>
     </div>
-</div>
+</section>

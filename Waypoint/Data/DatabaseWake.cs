@@ -10,7 +10,7 @@ public static class DatabaseWake
     public const int EstimatedSeconds = 60;
 
     /// <summary>How often the waking page reloads itself.</summary>
-    public const int RetryAfterSeconds = 20;
+    public const int RetryAfterSeconds = 30;
 
     // 40613: database not currently available (resuming). 40197/40501: service busy or reconfiguring.
     // 49918-49920: not enough resources to process the request yet.

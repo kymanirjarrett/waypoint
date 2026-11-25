@@ -26,11 +26,11 @@ if (!string.IsNullOrWhiteSpace(builder.Configuration["APPLICATIONINSIGHTS_CONNEC
 builder.Services.AddDbContext<WaypointDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("WaypointDb")
             ?? throw new InvalidOperationException("Connection string 'WaypointDb' not found."),
-        // Retry briefly (~20 s) for ordinary blips. A paused free database takes about a minute to resume, so rather than
+        // Retry briefly (~10 s) for ordinary blips. A paused free database takes about a minute to resume, so rather than
         // hold the visitor on a blank loading screen, give up early and show the "Waking up" page, which reloads itself.
         sqlOptions => sqlOptions.EnableRetryOnFailure(
             maxRetryCount: 3,
-            maxRetryDelay: TimeSpan.FromSeconds(8),
+            maxRetryDelay: TimeSpan.FromSeconds(4),
             errorNumbersToAdd: null))
         // The site only reads data, so skip change tracking for every query by default.
         .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));

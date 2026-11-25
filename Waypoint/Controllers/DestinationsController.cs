@@ -50,9 +50,16 @@ public class DestinationsController(WaypointDbContext db) : Controller
     [Route("{slug}")]
     public async Task<IActionResult> Details(string slug)
     {
+        // Slugs are stored lowercase (max 100 chars). ToLowerInvariant avoids culture surprises like the Turkish dotless i.
+        if (slug.Length > 100)
+        {
+            return NotFound();
+        }
+
+        var key = slug.ToLowerInvariant();
         var destination = await db.Destinations
             .AsNoTracking()
-            .FirstOrDefaultAsync(d => d.Slug == slug.ToLower());
+            .FirstOrDefaultAsync(d => d.Slug == key);
 
         if (destination is null)
         {

@@ -10,13 +10,13 @@ public class DestinationsController(WaypointDbContext db) : Controller
 {
     /// <summary>Card grid of every destination, optionally filtered by continent.</summary>
     [Route("")]
-    public async Task<IActionResult> Index(string? continent)
+    public async Task<IActionResult> Index(string? continent, CancellationToken cancellationToken = default)
     {
         ViewData["Continents"] = await db.Destinations
             .Select(d => d.Continent)
             .Distinct()
             .OrderBy(c => c)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
         ViewData["SelectedContinent"] = continent;
 
         IQueryable<Destination> query = db.Destinations;
@@ -25,12 +25,12 @@ public class DestinationsController(WaypointDbContext db) : Controller
             query = query.Where(d => d.Continent == continent);
         }
 
-        return View(await query.OrderBy(d => d.Name).ToListAsync());
+        return View(await query.OrderBy(d => d.Name).ToListAsync(cancellationToken));
     }
 
     /// <summary>Every row in the Destinations table, shown as an HTML table.</summary>
     [Route("table")]
-    public async Task<IActionResult> Table(string? sort)
+    public async Task<IActionResult> Table(string? sort, CancellationToken cancellationToken = default)
     {
         var destinations = db.Destinations;
         (var query, sort) = sort switch
@@ -43,12 +43,12 @@ public class DestinationsController(WaypointDbContext db) : Controller
         };
 
         ViewData["Sort"] = sort;
-        return View(await query.ToListAsync());
+        return View(await query.ToListAsync(cancellationToken));
     }
 
     /// <summary>Detail page for one destination. Unknown slugs return 404.</summary>
     [Route("{slug}")]
-    public async Task<IActionResult> Details(string slug)
+    public async Task<IActionResult> Details(string slug, CancellationToken cancellationToken = default)
     {
         // Slugs are stored lowercase (max 100 chars). ToLowerInvariant avoids culture surprises like the Turkish dotless i.
         if (slug.Length > 100)
@@ -58,7 +58,7 @@ public class DestinationsController(WaypointDbContext db) : Controller
 
         var key = slug.ToLowerInvariant();
         var destination = await db.Destinations
-            .FirstOrDefaultAsync(d => d.Slug == key);
+            .FirstOrDefaultAsync(d => d.Slug == key, cancellationToken);
 
         if (destination is null)
         {
@@ -69,11 +69,11 @@ public class DestinationsController(WaypointDbContext db) : Controller
         ViewData["Next"] = await db.Destinations
                                .Where(d => string.Compare(d.Name, destination.Name) > 0)
                                .OrderBy(d => d.Name)
-                               .FirstOrDefaultAsync()
+                               .FirstOrDefaultAsync(cancellationToken)
                            ?? await db.Destinations
                                .Where(d => d.Id != destination.Id)
                                .OrderBy(d => d.Name)
-                               .FirstOrDefaultAsync();
+                               .FirstOrDefaultAsync(cancellationToken);
 
         return View(destination);
     }

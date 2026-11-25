@@ -12,16 +12,16 @@ public class HomeController(WaypointDbContext db) : Controller
     public const int PreviewCount = 4;
 
     [Route("")]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(CancellationToken cancellationToken = default)
     {
         // The top-rated place becomes the hero photo; the next ones are previewed below it.
         var preview = await db.Destinations
             .OrderByDescending(d => d.Rating)
             .ThenBy(d => d.Name)
             .Take(PreviewCount + 1)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
-        ViewData["DestinationCount"] = await db.Destinations.CountAsync();
+        ViewData["DestinationCount"] = await db.Destinations.CountAsync(cancellationToken);
         return View(preview);
     }
 

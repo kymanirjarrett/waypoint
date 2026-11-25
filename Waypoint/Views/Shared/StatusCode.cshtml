@@ -1,10 +1,19 @@
 @model int
 @{
-    ViewData["Title"] = "Something went wrong";
+    var tooMany = Model == StatusCodes.Status429TooManyRequests;
+    ViewData["Title"] = tooMany ? "Slow down" : "Something went wrong";
 }
 
 <section class="wp-section wp-notfound">
-    <h1>That didn&rsquo;t work</h1>
-    <p class="wp-measure">Error @Model: the page couldn&rsquo;t be loaded. Try again, or start from the home page.</p>
+    @if (tooMany)
+    {
+        <h1>Slow down a little</h1>
+        <p class="wp-measure">Error 429: that was a lot of pages in a short time. Wait a minute, then try again.</p>
+    }
+    else
+    {
+        <h1>That didn&rsquo;t work</h1>
+        <p class="wp-measure">Error @Model: the page couldn&rsquo;t be loaded. Try again, or start from the home page.</p>
+    }
     <p class="m-0"><a class="btn btn-quiet" asp-controller="Home" asp-action="Index">Go home</a></p>
 </section>

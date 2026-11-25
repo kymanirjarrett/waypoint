@@ -1,4 +1,10 @@
+using System.Threading.RateLimiting;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
+using OpenTelemetry.Logs;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Waypoint;
 using Waypoint.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +12,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHealthChecks();
+
+// Production telemetry: requests, dependencies (SQL), exceptions, and warning-or-worse logs go to Application Insights.
+// App Service supplies the connection string as an app setting; locally it is unset, so nothing is sent.
+if (!string.IsNullOrWhiteSpace(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
+{
+    builder.Services.AddOpenTelemetry().UseAzureMonitor();
+    builder.Logging.AddFilter<OpenTelemetryLoggerProvider>(null, LogLevel.Warning);
+}
 
 // Register the EF Core DbContext so controllers can receive it through constructor injection.
 // The connection string lives in appsettings.json and points at SQL Server LocalDB.
@@ -27,10 +41,42 @@ builder.Services.AddDbContext<WaypointDbContext>(options =>
 builder.Services.AddOutputCache(options =>
     options.AddPolicy("Destinations", policy => policy.Expire(TimeSpan.FromMinutes(10)).SetVaryByQuery("continent", "sort")));
 
+// App Service terminates TLS at its front end and appends the real client IP to X-Forwarded-For.
+// Traffic can only reach the app through that front end, so trust the header (ForwardLimit 1 = the entry it appended).
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
+// Per-IP limit on database-backed pages so one client cannot drain the free database allowance.
+// Static pages are exempt; see docs/adr/0001-rate-limiting.md.
+var permitPerMinute = builder.Configuration.GetValue("RateLimiting:PermitPerMinute", 60);
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.OnRejected = (context, _) =>
+    {
+        if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+        {
+            context.HttpContext.Response.Headers.RetryAfter = ((int)retryAfter.TotalSeconds).ToString();
+        }
+
+        return ValueTask.CompletedTask;
+    };
+    options.AddPolicy(RateLimits.PerIp, httpContext => RateLimitPartition.GetFixedWindowLimiter(
+        httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        _ => new FixedWindowRateLimiterOptions { PermitLimit = permitPerMinute, Window = TimeSpan.FromMinutes(1) }));
+});
+
 // Generate lowercase URLs from tag helpers and Url.Action (e.g. /about/kymani, not /About/Kymani).
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
+
+// First, so every later middleware (rate limiter, HTTPS redirect, logging) sees the real client IP and scheme.
+app.UseForwardedHeaders();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -64,7 +110,9 @@ app.Use(async (context, next) =>
 
 app.UseHttpsRedirection();
 app.UseRouting();
+// Cached responses are served before the limiter, so cheap repeat views never count against a client.
 app.UseOutputCache();
+app.UseRateLimiter();
 
 app.UseAuthorization();
 

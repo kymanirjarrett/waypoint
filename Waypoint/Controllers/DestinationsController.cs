@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Waypoint.Models;
 namespace Waypoint.Controllers;
 
 [Route("destinations")]
+[EnableRateLimiting(RateLimits.PerIp)]
 public class DestinationsController(WaypointDbContext db) : Controller
 {
     /// <summary>Card grid of every destination, optionally filtered by continent.</summary>
@@ -14,12 +16,11 @@ public class DestinationsController(WaypointDbContext db) : Controller
     [Route("")]
     public async Task<IActionResult> Index(string? continent, CancellationToken cancellationToken = default)
     {
-        ViewData["Continents"] = await db.Destinations
+        var continents = await db.Destinations
             .Select(d => d.Continent)
             .Distinct()
             .OrderBy(c => c)
             .ToListAsync(cancellationToken);
-        ViewData["SelectedContinent"] = continent;
 
         IQueryable<Destination> query = db.Destinations;
         if (!string.IsNullOrWhiteSpace(continent))
@@ -27,7 +28,8 @@ public class DestinationsController(WaypointDbContext db) : Controller
             query = query.Where(d => d.Continent == continent);
         }
 
-        return View(await query.OrderBy(d => d.Name).ToListAsync(cancellationToken));
+        var destinations = await query.OrderBy(d => d.Name).ToListAsync(cancellationToken);
+        return View(new DestinationIndexViewModel(destinations, continents, continent));
     }
 
     /// <summary>Every row in the Destinations table, shown as an HTML table.</summary>
@@ -45,8 +47,7 @@ public class DestinationsController(WaypointDbContext db) : Controller
             _ => (destinations.OrderBy(d => d.Name), "name"),
         };
 
-        ViewData["Sort"] = sort;
-        return View(await query.ToListAsync(cancellationToken));
+        return View(new DestinationTableViewModel(await query.ToListAsync(cancellationToken), sort));
     }
 
     /// <summary>Detail page for one destination. Unknown slugs return 404.</summary>
@@ -70,7 +71,7 @@ public class DestinationsController(WaypointDbContext db) : Controller
         }
 
         // "Next destination" link: the next one alphabetically, wrapping back to the first.
-        ViewData["Next"] = await db.Destinations
+        var next = await db.Destinations
                                .Where(d => string.Compare(d.Name, destination.Name) > 0)
                                .OrderBy(d => d.Name)
                                .FirstOrDefaultAsync(cancellationToken)
@@ -79,6 +80,6 @@ public class DestinationsController(WaypointDbContext db) : Controller
                                .OrderBy(d => d.Name)
                                .FirstOrDefaultAsync(cancellationToken);
 
-        return View(destination);
+        return View(new DestinationDetailsViewModel(destination, next));
     }
 }

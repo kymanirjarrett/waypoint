@@ -1,7 +1,7 @@
-@model IEnumerable<Destination>
+@model DestinationTableViewModel
 @{
     ViewData["Title"] = "Destination Data";
-    var sort = ViewData["Sort"] as string ?? "name";
+    var sort = Model.Sort;
     var usd = System.Globalization.CultureInfo.GetCultureInfo("en-US");
     var columns = new (string Key, string Label)[]
     {
@@ -18,7 +18,7 @@
 <section class="wp-section">
     <div class="wp-table-wrap" role="region" aria-labelledby="table-caption" tabindex="0">
         <table class="table table-striped table-hover align-middle wp-table">
-            <caption id="table-caption">@Model.Count() destinations, sorted by @columns.First(c => c.Key == sort).Label.ToLower()<span class="d-md-none">. Scroll sideways for more columns.</span></caption>
+            <caption id="table-caption">@Model.Destinations.Count destinations, sorted by @columns.First(c => c.Key == sort).Label.ToLower()<span class="d-md-none">. Scroll sideways for more columns.</span></caption>
             <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var d in Model)
+                @foreach (var d in Model.Destinations)
                 {
                     <tr>
                         <td>@d.Id</td>

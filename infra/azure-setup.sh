@@ -64,6 +64,16 @@ az role assignment create --role "Website Contributor" \
   --assignee-principal-type ServicePrincipal \
   --scope "$(az webapp show -g "$RG" -n "$APP" --query id -o tsv)"
 
+# --- 5b. Telemetry: Application Insights on a capped Log Analytics workspace (stays inside the free 5 GB/month) ---
+az extension add -n application-insights --only-show-errors
+az monitor log-analytics workspace create -g "$RG" -n log-waypoint -l "$LOC" --quota 0.1 --retention-time 30
+az monitor app-insights component create -g "$RG" -a appi-waypoint -l "$LOC" --kind web --application-type web \
+  --workspace "$(az monitor log-analytics workspace show -g "$RG" -n log-waypoint --query id -o tsv)"
+az webapp config appsettings set -g "$RG" -n "$APP" --settings \
+  APPLICATIONINSIGHTS_CONNECTION_STRING="$(az monitor app-insights component show -g "$RG" -a appi-waypoint --query connectionString -o tsv)"
+# Stateless app: turn off ARR affinity so App Service sets no ARRAffinity cookie.
+az webapp update -g "$RG" -n "$APP" --client-affinity-enabled false
+
 # --- 6. $5 monthly budget with an email alert at 80% (actual) to the signed-in user ---
 SUB=$(az account show --query id -o tsv)
 az rest --method put \

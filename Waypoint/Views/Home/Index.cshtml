@@ -1,10 +1,10 @@
-@model IEnumerable<Destination>
+@model HomeIndexViewModel
 @{
     ViewData["Title"] = "Home";
-    var count = ViewData["DestinationCount"] as int? ?? Model.Count();
+    var count = Model.DestinationCount;
     var usd = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-    var hero = Model.FirstOrDefault();
-    var rest = Model.Skip(1);
+    var hero = Model.Hero;
+    var rest = Model.TopPicks;
 }
 
 <section class="wp-hero" aria-labelledby="hero-heading">

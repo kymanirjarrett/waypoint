@@ -1,8 +1,8 @@
-@model IEnumerable<Destination>
+@model DestinationIndexViewModel
 @{
     ViewData["Title"] = "Destinations";
-    var continents = ViewData["Continents"] as List<string> ?? [];
-    var selected = ViewData["SelectedContinent"] as string;
+    var continents = Model.Continents;
+    var selected = Model.SelectedContinent;
     var usd = System.Globalization.CultureInfo.GetCultureInfo("en-US");
 }
 
@@ -29,14 +29,14 @@
         <a class="btn btn-quiet" asp-action="Table">View as table</a>
     </div>
 
-    @if (!Model.Any())
+    @if (Model.Destinations.Count == 0)
     {
         <p>No destinations found.</p>
     }
     else
     {
         <ul class="wp-grid list-unstyled m-0">
-            @foreach (var d in Model)
+            @foreach (var d in Model.Destinations)
             {
                 <li class="wp-place">
                     @if (!string.IsNullOrEmpty(d.ImagePath))

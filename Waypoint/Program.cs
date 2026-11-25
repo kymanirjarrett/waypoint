@@ -12,9 +12,10 @@ builder.Services.AddDbContext<WaypointDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("WaypointDb")
             ?? throw new InvalidOperationException("Connection string 'WaypointDb' not found."),
         // The Azure SQL free database auto-pauses after an hour idle and takes about a minute to resume.
-        // The default retry policy gives up around that point, so allow ~2 minutes (under App Service's 230 s request timeout).
+        // Budget: 8 retries with backoff capped at 15 s is ~86 s of waiting; plus 9 connection attempts at the
+        // 15 s default Connect Timeout is ~221 s worst case, under App Service's 230 s front-end timeout.
         sqlOptions => sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 10,
+            maxRetryCount: 8,
             maxRetryDelay: TimeSpan.FromSeconds(15),
             errorNumbersToAdd: null))
         // The site only reads data, so skip change tracking for every query by default.

@@ -3,11 +3,24 @@ updates:
   - package-ecosystem: nuget
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
     target-branch: develop
+    groups:
+      # EF Core packages must stay on the same version, so update them in one PR.
+      ef-core:
+        patterns:
+          - "Microsoft.EntityFrameworkCore*"
+    ignore:
+      # The app targets .NET 10 (LTS). Major bumps of runtime-matched packages mean a framework upgrade, done on purpose, not by a bot.
+      - dependency-name: "Microsoft.EntityFrameworkCore*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "Microsoft.AspNetCore*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "Microsoft.Extensions*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
     target-branch: develop

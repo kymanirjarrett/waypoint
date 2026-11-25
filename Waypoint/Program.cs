@@ -11,8 +11,12 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<WaypointDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("WaypointDb")
             ?? throw new InvalidOperationException("Connection string 'WaypointDb' not found."),
-        // The Azure SQL free database auto-pauses when idle; the first query after that can fail transiently while it resumes.
-        sqlOptions => sqlOptions.EnableRetryOnFailure()));
+        // The Azure SQL free database auto-pauses after an hour idle and takes about a minute to resume.
+        // The default retry policy gives up around that point, so allow ~2 minutes (under App Service's 230 s request timeout).
+        sqlOptions => sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 10,
+            maxRetryDelay: TimeSpan.FromSeconds(15),
+            errorNumbersToAdd: null)));
 
 // Generate lowercase URLs from tag helpers and Url.Action (e.g. /about/kymani, not /About/Kymani).
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);

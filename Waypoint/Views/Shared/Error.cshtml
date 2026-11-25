@@ -3,7 +3,9 @@
 @{
     ViewData["Title"] = "Something went wrong";
     // The handler re-runs this page at /error; link back to the page that actually failed.
-    var failedPath = Context.Features.Get<IExceptionHandlerPathFeature>()?.Path ?? "/";
+    var failedPath = Context.Features.Get<IExceptionHandlerPathFeature>()?.Path;
+    // Only link to a path on this site: "//evil.example" would otherwise send the click to another origin.
+    if (!Url.IsLocalUrl(failedPath)) { failedPath = "/"; }
 }
 
 @* Shown to visitors in production (UseExceptionHandler). Development shows the detailed exception page instead. *@

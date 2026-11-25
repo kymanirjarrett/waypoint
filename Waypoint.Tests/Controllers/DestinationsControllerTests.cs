@@ -96,7 +96,72 @@ public class DestinationsControllerTests : IDisposable
         Assert.Equal("name", view.ViewData["Sort"]);
     }
 
+    public static TheoryData<string> OtherSortKeys() => new("country", "continent", "budget");
+
+    [Theory]
+    [MemberData(nameof(OtherSortKeys))]
+    public async Task Table_SortsByEachKeyThenName(string key)
+    {
+        var view = Assert.IsType<ViewResult>(await _controller.Table(key));
+        var model = Assert.IsAssignableFrom<IEnumerable<Destination>>(view.Model).ToList();
+
+        var expected = key switch
+        {
+            "country" => SeedData.Destinations.OrderBy(d => d.Country).ThenBy(d => d.Name),
+            "continent" => SeedData.Destinations.OrderBy(d => d.Continent).ThenBy(d => d.Name),
+            _ => SeedData.Destinations.OrderBy(d => d.AverageDailyBudgetUsd).ThenBy(d => d.Name),
+        };
+        Assert.Equal(key, view.ViewData["Sort"]);
+        Assert.Equal(expected.Select(d => d.Slug), model.Select(d => d.Slug));
+    }
+
     [Fact]
-    public void SeedData_SlugsAreUnique() =>
-        Assert.Equal(SeedData.Destinations.Length, SeedData.Destinations.Select(d => d.Slug).Distinct().Count());
+    public async Task Details_MixedCaseSlug_ReturnsDestination()
+    {
+        var view = Assert.IsType<ViewResult>(await _controller.Details("KyOtO"));
+
+        Assert.Equal("kyoto", Assert.IsType<Destination>(view.Model).Slug);
+    }
+
+    [Fact]
+    public async Task Details_OverlongSlug_ReturnsNotFound() =>
+        Assert.IsType<NotFoundResult>(await _controller.Details(new string('a', 101)));
+
+    [Fact]
+    public async Task Details_NextIsNeverTheSameDestination()
+    {
+        foreach (var d in SeedData.Destinations)
+        {
+            var view = Assert.IsType<ViewResult>(await _controller.Details(d.Slug));
+            Assert.NotEqual(d.Slug, Assert.IsType<Destination>(view.ViewData["Next"]).Slug);
+        }
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task Index_BlankContinent_ReturnsAll(string continent)
+    {
+        var view = Assert.IsType<ViewResult>(await _controller.Index(continent));
+
+        Assert.Equal(SeedData.Destinations.Length, Assert.IsAssignableFrom<IEnumerable<Destination>>(view.Model).Count());
+    }
+
+    [Fact]
+    public async Task Index_UnknownContinent_ReturnsEmptyList()
+    {
+        var view = Assert.IsType<ViewResult>(await _controller.Index("Atlantis"));
+
+        Assert.Empty(Assert.IsAssignableFrom<IEnumerable<Destination>>(view.Model));
+        Assert.Equal("Atlantis", view.ViewData["SelectedContinent"]);
+    }
+
+    [Fact]
+    public async Task Index_ContinentList_IsDistinctAndSorted()
+    {
+        var view = Assert.IsType<ViewResult>(await _controller.Index(null));
+        var continents = Assert.IsType<List<string>>(view.ViewData["Continents"]);
+
+        Assert.Equal(SeedData.Destinations.Select(d => d.Continent).Distinct().OrderBy(c => c), continents);
+    }
 }

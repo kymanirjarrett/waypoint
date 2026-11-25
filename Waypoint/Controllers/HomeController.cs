@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.OutputCaching;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,38 +12,30 @@ public class HomeController(WaypointDbContext db) : Controller
     /// <summary>Number of destinations previewed on the home page.</summary>
     public const int PreviewCount = 4;
 
+    [OutputCache(PolicyName = "Destinations")]
+
     [Route("")]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(CancellationToken cancellationToken = default)
     {
         // The top-rated place becomes the hero photo; the next ones are previewed below it.
         var preview = await db.Destinations
-            .AsNoTracking()
             .OrderByDescending(d => d.Rating)
             .ThenBy(d => d.Name)
             .Take(PreviewCount + 1)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
-        ViewData["DestinationCount"] = await db.Destinations.CountAsync();
+        ViewData["DestinationCount"] = await db.Destinations.CountAsync(cancellationToken);
         return View(preview);
     }
 
     [Route("privacy")]
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+    public IActionResult Privacy() => View();
 
     [Route("gallery")]
-    public IActionResult Gallery()
-    {
-        return View();
-    }
+    public IActionResult Gallery() => View();
 
     [Route("tips")]
-    public IActionResult Tips()
-    {
-        return View();
-    }
+    public IActionResult Tips() => View();
 
     [Route("error")]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -52,7 +45,7 @@ public class HomeController(WaypointDbContext db) : Controller
     }
 
     /// <summary>Re-executed by UseStatusCodePagesWithReExecute for empty 4xx/5xx responses, such as an unknown slug.</summary>
-    [Route("status/{code:int}")]
+    [Route("status/{code:int:range(400,599)}")]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult StatusCodePage(int code)
     {

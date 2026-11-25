@@ -4,7 +4,7 @@
 
 A travel guide by three friends: places we've been, places we're saving up for, when to go, and what a day there costs.
 
-**Live:** https://waypoint-e0dcgkgub6dpbfdv.westus-01.azurewebsites.net (free tier, so the first visit after a quiet spell can take a few seconds while it wakes up)
+**Live:** https://waypoint-e0dcgkgub6dpbfdv.westus-01.azurewebsites.net (free tier, so the first visit after a quiet spell can take about a minute while the database wakes up)
 
 ## Features
 

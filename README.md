@@ -6,8 +6,6 @@ A travel guide by three friends: places we've been, places we're saving up for, 
 
 **Live:** https://waypoint-e0dcgkgub6dpbfdv.westus-01.azurewebsites.net (free tier, so the first visit after a quiet spell can take a few seconds while it wakes up)
 
-![Waypoint home page](docs/screenshots/home-1440.webp)
-
 ## Features
 
 - Destination cards with continent filters, a detail page per destination, and a sortable table of every row in the database
@@ -52,20 +50,6 @@ dotnet test
   ```
 
 Schema changes: `dotnet ef migrations add <Name> --project Waypoint`. Seed data lives in `Waypoint/Data/SeedData.cs`.
-
-## Contributing
-
-- Branch off `develop`, open a pull request into `develop`, and merge once the `build` check passes. Releases go from `develop` to `main` by pull request.
-- [Conventional Commits](https://www.conventionalcommits.org/) (`feat: add tips page`).
-- Each person edits their own About page. Gallery and Tips content goes through two shared partials:
-
-```cshtml
-@* Views/Home/Gallery.cshtml: images in wwwroot/images/gallery/ *@
-<partial name="_PhotoGrid" model="photos" />   @* photos: List<GalleryPhoto>(Src, Alt, Caption, Credit?, CreditUrl?) *@
-
-@* Views/Home/Tips.cshtml: one heading per topic *@
-<partial name="_TipCard" model='new Tip("Roll, don't fold", "Rolled clothes take less space.")' />
-```
 
 ## Team
 

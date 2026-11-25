@@ -19,7 +19,7 @@ public class DestinationsController(WaypointDbContext db) : Controller
             .ToListAsync();
         ViewData["SelectedContinent"] = continent;
 
-        var query = db.Destinations.AsNoTracking();
+        IQueryable<Destination> query = db.Destinations;
         if (!string.IsNullOrWhiteSpace(continent))
         {
             query = query.Where(d => d.Continent == continent);
@@ -32,7 +32,7 @@ public class DestinationsController(WaypointDbContext db) : Controller
     [Route("table")]
     public async Task<IActionResult> Table(string? sort)
     {
-        var destinations = db.Destinations.AsNoTracking();
+        var destinations = db.Destinations;
         (var query, sort) = sort switch
         {
             "country" => (destinations.OrderBy(d => d.Country).ThenBy(d => d.Name), sort),
@@ -58,7 +58,6 @@ public class DestinationsController(WaypointDbContext db) : Controller
 
         var key = slug.ToLowerInvariant();
         var destination = await db.Destinations
-            .AsNoTracking()
             .FirstOrDefaultAsync(d => d.Slug == key);
 
         if (destination is null)
@@ -67,11 +66,11 @@ public class DestinationsController(WaypointDbContext db) : Controller
         }
 
         // "Next destination" link: the next one alphabetically, wrapping back to the first.
-        ViewData["Next"] = await db.Destinations.AsNoTracking()
+        ViewData["Next"] = await db.Destinations
                                .Where(d => string.Compare(d.Name, destination.Name) > 0)
                                .OrderBy(d => d.Name)
                                .FirstOrDefaultAsync()
-                           ?? await db.Destinations.AsNoTracking()
+                           ?? await db.Destinations
                                .Where(d => d.Id != destination.Id)
                                .OrderBy(d => d.Name)
                                .FirstOrDefaultAsync();

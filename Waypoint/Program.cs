@@ -16,7 +16,9 @@ builder.Services.AddDbContext<WaypointDbContext>(options =>
         sqlOptions => sqlOptions.EnableRetryOnFailure(
             maxRetryCount: 10,
             maxRetryDelay: TimeSpan.FromSeconds(15),
-            errorNumbersToAdd: null)));
+            errorNumbersToAdd: null))
+        // The site only reads data, so skip change tracking for every query by default.
+        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
 // Generate lowercase URLs from tag helpers and Url.Action (e.g. /about/kymani, not /About/Kymani).
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);

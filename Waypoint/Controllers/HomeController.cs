@@ -16,7 +16,6 @@ public class HomeController(WaypointDbContext db) : Controller
     {
         // The top-rated place becomes the hero photo; the next ones are previewed below it.
         var preview = await db.Destinations
-            .AsNoTracking()
             .OrderByDescending(d => d.Rating)
             .ThenBy(d => d.Name)
             .Take(PreviewCount + 1)

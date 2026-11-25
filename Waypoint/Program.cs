@@ -50,6 +50,18 @@ else
 // Empty error responses (like NotFound() for an unknown slug) re-run through a styled page instead of a blank browser 404.
 app.UseStatusCodePagesWithReExecute("/status/{0}");
 
+// Baseline security headers on every response. Everything (scripts, styles, fonts, images) is self-hosted,
+// so the policy only allows this origin; frame-ancestors 'none' blocks clickjacking.
+app.Use(async (context, next) =>
+{
+    var headers = context.Response.Headers;
+    headers.XContentTypeOptions = "nosniff";
+    headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+    headers.ContentSecurityPolicy =
+        "default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
+    await next();
+});
+
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseOutputCache();

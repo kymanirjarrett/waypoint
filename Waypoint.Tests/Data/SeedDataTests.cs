@@ -32,4 +32,8 @@ public class SeedDataTests
         Assert.StartsWith("/images/destinations/", d.ImagePath);
         Assert.True(File.Exists(Path.Combine(WebRoot, d.ImagePath.TrimStart('/'))), $"Missing photo file for {slug}");
     }
+
+    [Fact]
+    public void SlugsAreUnique() =>
+        Assert.Equal(SeedData.Destinations.Length, SeedData.Destinations.Select(d => d.Slug).Distinct().Count());
 }

@@ -7,14 +7,26 @@
 </header>
 
 <section class="wp-section">
-    @* Empty state: delete this paragraph once real content is added. *@
-    <p class="wp-empty">Tips from our trips are on the way. Until then, each <a asp-controller="Destinations" asp-action="Index">destination page</a> lists the best time to go and a daily budget.</p>
-    @*
-        Evan: group tips under a heading per topic, one _TipCard per tip. Example:
 
-        <h2 class="wp-title">Packing</h2>
-        <partial name="_TipCard" model='new Tip("Roll, don't fold", "Your tip text here.")' />
+    <h2 class="wp-title">Packing</h2>
+    <partial name="_TipCard"
+        model='new Tip("Pack extra clothes", "You never know what might happen, so bring extra clothes just in case.")' />
 
-        See "Gallery and Tips partials" in the README.
-    *@
+
+    <h2 class="wp-title">Budgeting</h2>
+    <partial name="_TipCard"
+       model='new Tip("Track your expenses", "Keep track of purchases throughout your trip so you know where your money is going.")' />
+
+   <h2 class="wp-title">Getting Around</h2>
+   <partial name="_TipCard"
+       model='new Tip("Plan your routes ahead of time", "Identify nearby attractions and group activities by location to reduce unnecessary travel.")' />
+    
+    <h2 class="wp-title">Lodging</h2>
+    <partial name="_TipCard"
+             model='new Tip("Book early", "Popular hotels and Airbnbs fill up quickly, so book your lodging as soon as you know your travel dates.")' />
+
+    <h2 class="wp-title">Traveling (by Car)</h2>
+    <partial name="_TipCard"
+             model='new Tip("Take Breaks", "It is always important to take regular breaks during long drives to avoid fatigue, especially in the legs.")' />
+
 </section>

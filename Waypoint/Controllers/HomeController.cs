@@ -29,22 +29,13 @@ public class HomeController(WaypointDbContext db) : Controller
     }
 
     [Route("privacy")]
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+    public IActionResult Privacy() => View();
 
     [Route("gallery")]
-    public IActionResult Gallery()
-    {
-        return View();
-    }
+    public IActionResult Gallery() => View();
 
     [Route("tips")]
-    public IActionResult Tips()
-    {
-        return View();
-    }
+    public IActionResult Tips() => View();
 
     [Route("error")]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

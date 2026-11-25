@@ -43,8 +43,8 @@ else
 {
     // In development, create the LocalDB database and apply any pending migrations on startup
     // so a fresh clone runs without a manual `dotnet ef database update`.
-    using var scope = app.Services.CreateScope();
-    scope.ServiceProvider.GetRequiredService<WaypointDbContext>().Database.Migrate();
+    await using var scope = app.Services.CreateAsyncScope();
+    await scope.ServiceProvider.GetRequiredService<WaypointDbContext>().Database.MigrateAsync();
 }
 
 // Empty error responses (like NotFound() for an unknown slug) re-run through a styled page instead of a blank browser 404.

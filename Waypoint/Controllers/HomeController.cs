@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.OutputCaching;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waypoint.Data;
@@ -42,6 +43,19 @@ public class HomeController(WaypointDbContext db) : Controller
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
+        var feature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+        // The free database pauses after an hour idle. Instead of a generic error, say it is waking up,
+        // answer 503 so crawlers treat it as temporary, and reload the page the visitor asked for.
+        if (DatabaseWake.IsWaking(feature?.Error))
+        {
+            var path = Url.IsLocalUrl(feature?.Path) ? feature!.Path : "/";
+            Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+            Response.Headers.RetryAfter = DatabaseWake.RetryAfterSeconds.ToString();
+            Response.Headers["Refresh"] = $"{DatabaseWake.RetryAfterSeconds}; url={path}";
+            return View("Waking", path);
+        }
+
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 

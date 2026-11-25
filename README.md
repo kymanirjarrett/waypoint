@@ -4,7 +4,7 @@
 
 A travel guide by three friends: places we've been, places we're saving up for, when to go, and what a day there costs.
 
-**Live:** https://waypoint-e0dcgkgub6dpbfdv.westus-01.azurewebsites.net (free tier, so the first visit after a quiet spell can take a few seconds while it wakes up)
+**Live:** https://waypoint-e0dcgkgub6dpbfdv.westus-01.azurewebsites.net (free tier, so the first visit after a quiet spell can take about a minute while the database wakes up)
 
 ## Features
 
@@ -28,7 +28,7 @@ GitHub Actions (main) --OIDC--> Azure App Service (Free F1, .NET 10)
 
 - **No stored secrets.** The app signs in to SQL with its managed identity, and deploys sign in to Azure with OpenID Connect. The repo and GitHub hold no passwords or keys.
 - **Least privilege.** The app's database user can only read and write data, not change the schema. Migrations run separately as the admin (`infra/azure-migrate.sh`).
-- **Never bills.** The free database pauses instead of charging when it reaches its monthly limit, and the app retries while it resumes.
+- **Never bills.** The free database pauses instead of charging when it reaches its monthly limit, and while it resumes (about a minute) visitors see a "Waking up" page that reloads itself.
 - **Every push to `main` deploys**, then a smoke test checks the key pages return 200.
 - **Releases with a migration:** run `infra/azure-migrate.sh` before merging the release into `main`. Deploys do not change the schema, and migrations should stay additive so the running version keeps working.
 - **Accepted risk:** the SQL firewall allows Azure services (`0.0.0.0`) because the free App Service plan has no private networking. Sign-in is Entra-only, so reaching the endpoint is not enough to log in.

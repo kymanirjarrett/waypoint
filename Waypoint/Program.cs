@@ -26,12 +26,11 @@ if (!string.IsNullOrWhiteSpace(builder.Configuration["APPLICATIONINSIGHTS_CONNEC
 builder.Services.AddDbContext<WaypointDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("WaypointDb")
             ?? throw new InvalidOperationException("Connection string 'WaypointDb' not found."),
-        // The Azure SQL free database auto-pauses after an hour idle and takes about a minute to resume.
-        // Budget: 8 retries with backoff capped at 15 s is ~86 s of waiting; plus 9 connection attempts at the
-        // 15 s default Connect Timeout is ~221 s worst case, under App Service's 230 s front-end timeout.
+        // Retry briefly (~10 s) for ordinary blips. A paused free database takes about a minute to resume, so rather than
+        // hold the visitor on a blank loading screen, give up early and show the "Waking up" page, which reloads itself.
         sqlOptions => sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 8,
-            maxRetryDelay: TimeSpan.FromSeconds(15),
+            maxRetryCount: 3,
+            maxRetryDelay: TimeSpan.FromSeconds(4),
             errorNumbersToAdd: null))
         // The site only reads data, so skip change tracking for every query by default.
         .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));

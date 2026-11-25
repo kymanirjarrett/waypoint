@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -19,6 +20,9 @@ public class WaypointFactory : WebApplicationFactory<Program>
     /// <summary>Requests per minute per client IP. High by default so ordinary tests never hit the limiter.</summary>
     public int PermitPerMinute { get; init; } = 10_000;
 
+    /// <summary>If set, every database query throws this, to simulate a paused or failing database.</summary>
+    public Func<Exception>? QueryFailure { get; init; }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
@@ -29,14 +33,31 @@ public class WaypointFactory : WebApplicationFactory<Program>
         {
             services.RemoveAll<DbContextOptions<WaypointDbContext>>();
             services.RemoveAll<IDbContextOptionsConfiguration<WaypointDbContext>>();
-            services.AddDbContext<WaypointDbContext>(options => options.UseInMemoryDatabase(_databaseName));
+            services.AddDbContext<WaypointDbContext>(options =>
+            {
+                options.UseInMemoryDatabase(_databaseName);
+                if (QueryFailure is not null)
+                {
+                    options.AddInterceptors(new FailingQueryInterceptor(QueryFailure));
+                }
+            });
 
-            using var scope = services.BuildServiceProvider().CreateScope();
-            scope.ServiceProvider.GetRequiredService<WaypointDbContext>().Database.EnsureCreated(); // seed rows
+            if (QueryFailure is null)
+            {
+                using var scope = services.BuildServiceProvider().CreateScope();
+                scope.ServiceProvider.GetRequiredService<WaypointDbContext>().Database.EnsureCreated(); // seed rows
+            }
         });
     }
 
     /// <summary>An HTTPS client that does not follow redirects, so status codes are asserted as sent.</summary>
     public HttpClient CreateHttpsClient() =>
         CreateClient(new WebApplicationFactoryClientOptions { BaseAddress = new Uri("https://localhost"), AllowAutoRedirect = false });
+}
+
+/// <summary>Throws when EF Core starts compiling a query, which works with any provider (including InMemory).</summary>
+internal sealed class FailingQueryInterceptor(Func<Exception> failure) : IQueryExpressionInterceptor
+{
+    public System.Linq.Expressions.Expression QueryCompilationStarting(
+        System.Linq.Expressions.Expression queryExpression, QueryExpressionEventData eventData) => throw failure();
 }

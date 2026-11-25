@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waypoint.Data;
@@ -9,6 +10,7 @@ namespace Waypoint.Controllers;
 public class DestinationsController(WaypointDbContext db) : Controller
 {
     /// <summary>Card grid of every destination, optionally filtered by continent.</summary>
+    [OutputCache(PolicyName = "Destinations")]
     [Route("")]
     public async Task<IActionResult> Index(string? continent, CancellationToken cancellationToken = default)
     {
@@ -29,6 +31,7 @@ public class DestinationsController(WaypointDbContext db) : Controller
     }
 
     /// <summary>Every row in the Destinations table, shown as an HTML table.</summary>
+    [OutputCache(PolicyName = "Destinations")]
     [Route("table")]
     public async Task<IActionResult> Table(string? sort, CancellationToken cancellationToken = default)
     {
@@ -47,6 +50,7 @@ public class DestinationsController(WaypointDbContext db) : Controller
     }
 
     /// <summary>Detail page for one destination. Unknown slugs return 404.</summary>
+    [OutputCache(PolicyName = "Destinations")]
     [Route("{slug}")]
     public async Task<IActionResult> Details(string slug, CancellationToken cancellationToken = default)
     {

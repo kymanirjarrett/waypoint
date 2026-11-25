@@ -21,6 +21,11 @@ builder.Services.AddDbContext<WaypointDbContext>(options =>
         // The site only reads data, so skip change tracking for every query by default.
         .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
+// Destination data only changes with a deploy (seed data + migration), and a deploy restarts the app,
+// which clears this in-memory cache. So cached pages never go stale and visitors rarely wake the paused database.
+builder.Services.AddOutputCache(options =>
+    options.AddPolicy("Destinations", policy => policy.Expire(TimeSpan.FromMinutes(10)).SetVaryByQuery("continent", "sort")));
+
 // Generate lowercase URLs from tag helpers and Url.Action (e.g. /about/kymani, not /About/Kymani).
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
@@ -46,6 +51,7 @@ app.UseStatusCodePagesWithReExecute("/status/{0}");
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseOutputCache();
 
 app.UseAuthorization();
 

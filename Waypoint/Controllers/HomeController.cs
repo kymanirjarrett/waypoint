@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.OutputCaching;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,8 @@ public class HomeController(WaypointDbContext db) : Controller
 {
     /// <summary>Number of destinations previewed on the home page.</summary>
     public const int PreviewCount = 4;
+
+    [OutputCache(PolicyName = "Destinations")]
 
     [Route("")]
     public async Task<IActionResult> Index(CancellationToken cancellationToken = default)

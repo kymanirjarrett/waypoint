@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.OutputCaching;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ public class HomeController(WaypointDbContext db) : Controller
     public const int PreviewCount = 4;
 
     [OutputCache(PolicyName = "Destinations")]
+    [EnableRateLimiting(RateLimits.PerIp)]
 
     [Route("")]
     public async Task<IActionResult> Index(CancellationToken cancellationToken = default)

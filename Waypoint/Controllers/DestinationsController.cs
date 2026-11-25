@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Waypoint.Models;
 namespace Waypoint.Controllers;
 
 [Route("destinations")]
+[EnableRateLimiting(RateLimits.PerIp)]
 public class DestinationsController(WaypointDbContext db) : Controller
 {
     /// <summary>Card grid of every destination, optionally filtered by continent.</summary>

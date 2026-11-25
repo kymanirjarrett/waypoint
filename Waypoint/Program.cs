@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHealthChecks();
 
 // Register the EF Core DbContext so controllers can receive it through constructor injection.
 // The connection string lives in appsettings.json and points at SQL Server LocalDB.
@@ -56,6 +57,9 @@ app.UseOutputCache();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+// Liveness only: no database check, so uptime probes and the deploy smoke test never wake the paused database.
+app.MapHealthChecks("/healthz");
 
 // Every controller declares its routes with [Route] attributes, so no conventional route table is needed.
 app.MapControllers()

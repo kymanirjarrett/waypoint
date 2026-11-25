@@ -2,19 +2,23 @@
 @using Waypoint.Data
 @{
     ViewData["Title"] = "Waking up";
-    // The Refresh response header reloads this page on its own; the link is for anyone who doesn't want to wait.
 }
 
-<section class="wp-section wp-notfound" aria-live="polite">
+<section class="wp-section wp-notfound">
     <h1>Waking up</h1>
-    <p class="wp-measure">
+    <p class="wp-measure" aria-live="polite">
         Waypoint runs on a free database that goes to sleep after an hour with no visitors.
         It&rsquo;s starting now, which usually takes <strong>about a minute</strong>.
     </p>
-    <p class="wp-measure">
-        This page will try again by itself every @DatabaseWake.RetryAfterSeconds seconds, so you can leave it open.
+    @* The countdown is updated by waking.js. Without JavaScript, the Refresh response header still reloads on time. *@
+    <p class="wp-measure" data-waking-countdown data-seconds="@DatabaseWake.RetryAfterSeconds" data-url="@Model">
+        Retrying in <span class="wp-countdown" data-waking-seconds>@DatabaseWake.RetryAfterSeconds</span> seconds. You can leave this page open.
     </p>
     <p class="d-flex flex-wrap gap-3 m-0">
         <a class="btn btn-accent" href="@Model">Try again now</a>
     </p>
 </section>
+
+@section Scripts {
+    <script src="~/js/waking.js" asp-append-version="true"></script>
+}

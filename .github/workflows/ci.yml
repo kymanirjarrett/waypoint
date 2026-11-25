@@ -66,12 +66,14 @@ jobs:
           app-name: ${{ vars.AZURE_WEBAPP_NAME }}
           package: ${{ runner.temp }}/publish
 
-      # F1 has no Always On, so the first request after a deploy can take a while. Retry for about 90 seconds.
+      # F1 has no Always On and the free database may be paused, so the first requests can be slow.
+      # /healthz proves the app started; the two pages prove the database answers (no dependency on a specific seed row).
+      # Each path gets up to 9 attempts of at most 30 s plus a 10 s pause: about 6 minutes worst case before failing.
       - name: Smoke test
         env:
           BASE_URL: ${{ vars.AZURE_WEBAPP_URL }}
         run: |
-          for path in / /destinations /destinations/kyoto; do
+          for path in /healthz / /destinations/table; do
             ok=""
             for attempt in $(seq 1 9); do
               code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "$BASE_URL$path" || true)

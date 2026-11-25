@@ -52,7 +52,7 @@ public class HomeController(WaypointDbContext db) : Controller
     }
 
     /// <summary>Re-executed by UseStatusCodePagesWithReExecute for empty 4xx/5xx responses, such as an unknown slug.</summary>
-    [Route("status/{code:int}")]
+    [Route("status/{code:int:range(400,599)}")]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult StatusCodePage(int code)
     {

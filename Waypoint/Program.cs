@@ -1,4 +1,6 @@
 using System.Threading.RateLimiting;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
+using OpenTelemetry.Logs;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHealthChecks();
+
+// Production telemetry: requests, dependencies (SQL), exceptions, and warning-or-worse logs go to Application Insights.
+// App Service supplies the connection string as an app setting; locally it is unset, so nothing is sent.
+if (!string.IsNullOrWhiteSpace(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
+{
+    builder.Services.AddOpenTelemetry().UseAzureMonitor();
+    builder.Logging.AddFilter<OpenTelemetryLoggerProvider>(null, LogLevel.Warning);
+}
 
 // Register the EF Core DbContext so controllers can receive it through constructor injection.
 // The connection string lives in appsettings.json and points at SQL Server LocalDB.

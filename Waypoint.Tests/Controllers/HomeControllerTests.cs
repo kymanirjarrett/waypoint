@@ -31,11 +31,12 @@ public class HomeControllerTests : IDisposable
     public async Task Index_PreviewsTopRatedDestinationsFromDatabase()
     {
         var view = Assert.IsType<ViewResult>(await _controller.Index());
-        var model = Assert.IsAssignableFrom<IEnumerable<Destination>>(view.Model).ToList();
+        var model = Assert.IsType<HomeIndexViewModel>(view.Model);
+        var expected = SeedData.Destinations.OrderByDescending(d => d.Rating).ThenBy(d => d.Name).ToList();
 
-        Assert.Equal(HomeController.PreviewCount + 1, model.Count); // hero + preview
-        Assert.Equal(model.OrderByDescending(d => d.Rating).ThenBy(d => d.Name).Select(d => d.Slug), model.Select(d => d.Slug));
-        Assert.Equal(SeedData.Destinations.Length, view.ViewData["DestinationCount"]);
+        Assert.Equal(expected[0].Slug, model.Hero?.Slug);
+        Assert.Equal(expected.Skip(1).Take(HomeController.PreviewCount).Select(d => d.Slug), model.TopPicks.Select(d => d.Slug));
+        Assert.Equal(SeedData.Destinations.Length, model.DestinationCount);
     }
 
     [Fact]

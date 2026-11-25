@@ -15,19 +15,18 @@ public class HomeController(WaypointDbContext db) : Controller
 
     [OutputCache(PolicyName = "Destinations")]
     [EnableRateLimiting(RateLimits.PerIp)]
-
     [Route("")]
     public async Task<IActionResult> Index(CancellationToken cancellationToken = default)
     {
         // The top-rated place becomes the hero photo; the next ones are previewed below it.
-        var preview = await db.Destinations
+        var topRated = await db.Destinations
             .OrderByDescending(d => d.Rating)
             .ThenBy(d => d.Name)
             .Take(PreviewCount + 1)
             .ToListAsync(cancellationToken);
 
-        ViewData["DestinationCount"] = await db.Destinations.CountAsync(cancellationToken);
-        return View(preview);
+        var count = await db.Destinations.CountAsync(cancellationToken);
+        return View(new HomeIndexViewModel(topRated.FirstOrDefault(), topRated.Skip(1).ToList(), count));
     }
 
     [Route("privacy")]

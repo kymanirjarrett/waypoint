@@ -2,27 +2,27 @@
     ViewData["Title"] = "Riddhi Mahajan";
 }
 
-@* Riddhi: replace every [bracketed blank] with your own details, then delete this comment. *@
-
 <header class="page-header">
     <p class="wp-back"><a asp-controller="About" asp-action="Index">Back to the team</a></p>
     <h1>Riddhi Mahajan</h1>
-    <p class="lead">[Your major] student at the University of Cincinnati &middot; Destinations &amp; database</p>
+    <p class="lead">Information Technology student at the University of Cincinnati &middot; Destinations &amp; database</p>
 </header>
 
 <section class="wp-section">
     <div class="wp-profile">
         <div>
-            <div class="img-placeholder" role="img" aria-label="Photo of Riddhi Mahajan (placeholder)">Photo coming soon</div>
+            <img class="wp-portrait" src="~/images/team/riddhi.webp" width="720" height="944"
+                 alt="Riddhi Mahajan smiling, with long dark hair, in a gray blazer over a white collared shirt." />
         </div>
         <div class="wp-measure">
             <h2>Bio</h2>
             <p>
-                Hi, I&rsquo;m Riddhi! I&rsquo;m a [year, e.g. junior] studying [your major] at the University of Cincinnati.
-                I&rsquo;m originally from [your hometown], and I got into traveling because [what got you into travel].
+                Hi, I&rsquo;m Riddhi! I&rsquo;m a senior studying Information Technology at the University of Cincinnati,
+                graduating in spring 2028. I&rsquo;m originally from New Delhi, India, and I got into traveling because I love
+                exploring new cultures and trying new food wherever I go.
             </p>
             <p>
-                When I&rsquo;m not planning my next trip, I like [a hobby or two]. After graduation, I hope to [career goal].
+                When I&rsquo;m not planning my next trip, I love singing, dancing, and spending time with my friends and family.
             </p>
 
             <h2>My role on Waypoint</h2>
@@ -38,18 +38,36 @@
             <h2>How I travel</h2>
             <dl>
                 <dt>Travel style</dt>
-                <dd>[e.g. city breaks, road trips, backpacking]</dd>
+                <dd>All kinds: city breaks, road trips, and family vacations</dd>
                 <dt>Must-pack item</dt>
-                <dd>[the one thing you never travel without]</dd>
+                <dd>My camera</dd>
                 <dt>Dream destination</dt>
-                <dd>[the place at the top of your list]</dd>
+                <dd><a asp-controller="Destinations" asp-action="Details" asp-route-slug="prague">Prague</a></dd>
             </dl>
 
             <h2>Favorite trips</h2>
             <ul>
-                <li><strong>[Place 1]</strong> &ndash; [one sentence on why you loved it]</li>
-                <li><strong>[Place 2]</strong> &ndash; [one sentence on why you loved it]</li>
+                <li><strong>Europe</strong> &ndash; Sweden, Denmark, Finland, and Germany gave me new cities to explore, new cultures to learn about, and plenty of new food to try.</li>
+                <li><strong>Walt Disney World, Florida</strong> &ndash; A packed few days of rides, parades, and fireworks across the parks.</li>
             </ul>
+
+            <h2>Where I&rsquo;ve been</h2>
+            <dl>
+                <dt>India</dt>
+                <dd>Home, and I&rsquo;ve traveled to almost every state</dd>
+                <dt>Europe</dt>
+                <dd>Sweden, Denmark, Finland, and Germany</dd>
+                <dt>United States</dt>
+                <dd>Alabama, Florida, Illinois, Indiana, New Mexico, New York, North Carolina, Ohio, Pennsylvania, Tennessee, Texas, and Washington, D.C.</dd>
+            </dl>
+
+            <h2>On my list</h2>
+            <p>
+                <a asp-controller="Destinations" asp-action="Details" asp-route-slug="prague">Prague</a>,
+                <a asp-controller="Destinations" asp-action="Details" asp-route-slug="kyoto">Kyoto</a>, and
+                <a asp-controller="Destinations" asp-action="Details" asp-route-slug="san-francisco">San Francisco</a>,
+                the city I&rsquo;d most like to live in someday.
+            </p>
         </div>
     </div>
 </section>

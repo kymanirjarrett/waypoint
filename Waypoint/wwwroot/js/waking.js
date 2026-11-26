@@ -4,7 +4,7 @@
   var box = document.querySelector('[data-waking-countdown]');
   if (!box) return;
   var label = box.querySelector('[data-waking-seconds]');
-  var seconds = parseInt(box.getAttribute('data-seconds'), 10) || 30;
+  var seconds = parseInt(box.getAttribute('data-seconds'), 10) || 60;
   var url = box.getAttribute('data-url') || '/';
   // Only follow same-site paths ("/x"), never "//host" or full URLs.
   if (url.charAt(0) !== '/' || url.charAt(1) === '/' || url.charAt(1) === '\\') url = '/';

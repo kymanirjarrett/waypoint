@@ -10,7 +10,7 @@ public static class DatabaseWake
     public const int EstimatedSeconds = 60;
 
     /// <summary>How often the waking page reloads itself.</summary>
-    public const int RetryAfterSeconds = 30;
+    public const int RetryAfterSeconds = 60;
 
     // -2: timeout. Seen in production: while the database resumes, login stalls in the post-login phase until the
     //     connect timeout expires (EF does not retry this, so it must be recognized here).

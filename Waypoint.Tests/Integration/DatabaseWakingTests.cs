@@ -15,10 +15,10 @@ public class DatabaseWakingTests
         var body = await response.Content.ReadAsStringAsync();
 
         Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
-        Assert.Equal("30", response.Headers.GetValues("Retry-After").Single());
-        Assert.Equal("30; url=/destinations/table", response.Headers.GetValues("Refresh").Single());
+        Assert.Equal("60", response.Headers.GetValues("Retry-After").Single());
+        Assert.Equal("60; url=/destinations/table", response.Headers.GetValues("Refresh").Single());
         Assert.Contains("about a minute", body);
-        Assert.Contains("data-seconds=\"30\"", body);
+        Assert.Contains("data-seconds=\"60\"", body);
         Assert.Matches(@"/js/waking(\.[a-z0-9]+)?\.js", body); // static assets may be fingerprinted
     }
 

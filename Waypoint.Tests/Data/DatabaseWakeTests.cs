@@ -20,4 +20,15 @@ public class DatabaseWakeTests
     [Fact]
     public void NoException_IsNotWaking() =>
         Assert.False(DatabaseWake.IsWaking(null));
+
+    [Theory]
+    [InlineData(-2)]     // connect/login timeout while resuming (seen in production)
+    [InlineData(40613)]  // database not currently available
+    [InlineData(49918)]
+    public void ResumeErrorNumbers_AreWaking(int number) => Assert.True(DatabaseWake.IsWakingErrorNumber(number));
+
+    [Theory]
+    [InlineData(208)]    // invalid object name: a real bug, not a wake-up
+    [InlineData(18456)]  // login failed
+    public void OtherErrorNumbers_AreNotWaking(int number) => Assert.False(DatabaseWake.IsWakingErrorNumber(number));
 }

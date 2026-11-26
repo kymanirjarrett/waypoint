@@ -15,4 +15,13 @@ Files live in `wwwroot/images/destinations/`, cropped to 1600x1067 WebP and kept
 | `destinations/queenstown.webp` | Donald Wu | [Unsplash](https://unsplash.com/photos/aerial-view-of-queenstown-and-lake-wakatipu-new-zealand-sU2NHLTnVTI) |
 | `destinations/cusco.webp` | Sophia Simoes | [Unsplash](https://unsplash.com/photos/plaza-de-armas-in-cusco-with-cathedral-and-mountains-pw7eT19wz4c) |
 
+### Gallery
+
+| File | Photographer | Source |
+|---|---|---|
+| `gallery/ken-bitar-qTYn528bvT8-unsplash.webp` | Ken Bitar | [Unsplash](https://unsplash.com/photos/a-lighthouse-tops-a-harbor-side-building-qTYn528bvT8) |
+| `gallery/nikhil-mistry-xzq5VP4D_50-unsplash.webp` | Nikhil Mistry | [Unsplash](https://unsplash.com/photos/a-group-of-people-standing-on-a-pier-at-sunset-xzq5VP4D_50) |
+| `gallery/tom-podmore-CDTL4Wtyi8w-unsplash.webp` | Tom Podmore | [Unsplash](https://unsplash.com/photos/a-group-of-boats-floating-on-top-of-a-body-of-water-CDTL4Wtyi8w) |
+| `gallery/jaime-creixems-pGGxkUXbW-c-unsplash.webp` | Jaime Creixems | [Unsplash](https://unsplash.com/photos/fireworks-at-night-pGGxkUXbW-c) |
+
 Adding a photo: check its license page first, add a row here, and fill in `ImagePath`, `ImageAlt`, `ImageCredit`, and `ImageCreditUrl` on the destination (new migration if it is a seed row).

@@ -13,12 +13,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Waypoint</title>
     <meta name="description" content="@(ViewData["Description"] as string ?? "Destinations, photos, and travel tips from three University of Cincinnati students.")" />
+    <link rel="icon" href="~/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="~/favicon.ico" sizes="48x48" />
+    <link rel="apple-touch-icon" href="~/apple-touch-icon.png" />
+    <meta name="theme-color" content="#f7f3ec" />
     <link rel="preload" href="~/fonts/gloock-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="~/fonts/public-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Waypoint.styles.css" asp-append-version="true" />
 </head>
 <body>
     @* Sun-bleached paper texture (landing-pages preset). Static, behind all content. *@
@@ -85,7 +87,6 @@
     <footer class="site-footer">
         <div>
             <p class="wp-footer-brand">Waypoint</p>
-            <p>A travel guide by three students for IT3047C at the University of Cincinnati.</p>
         </div>
         <div>
             <ul>
@@ -101,7 +102,6 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

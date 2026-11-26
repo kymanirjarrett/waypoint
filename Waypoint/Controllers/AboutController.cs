@@ -6,26 +6,14 @@ namespace Waypoint.Controllers;
 public class AboutController : Controller
 {
     [Route("")]
-    public IActionResult Index()
-    {
-        return View();
-    }
+    public IActionResult Index() => View();
 
     [Route("kymani")]
-    public IActionResult Kymani()
-    {
-        return View();
-    }
+    public IActionResult Kymani() => View();
 
     [Route("riddhi")]
-    public IActionResult Riddhi()
-    {
-        return View();
-    }
+    public IActionResult Riddhi() => View();
 
     [Route("evan")]
-    public IActionResult Evan()
-    {
-        return View();
-    }
+    public IActionResult Evan() => View();
 }

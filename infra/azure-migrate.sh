@@ -14,8 +14,9 @@ MYIP=$(curl -s -4 https://api.ipify.org)
 # Mobile/carrier networks rotate the public IP between connections, so open the /16 around it.
 # Still safe while it is open: the server accepts Entra sign-ins only, and the rule is removed on exit.
 START="${MYIP%.*.*}.0.0"; END="${MYIP%.*.*}.255.255"
+# Arm cleanup first, so the rule is removed even if the script is interrupted right after creating it.
+trap 'az sql server firewall-rule delete -g "$RG" -s "$SQL" -n temp-migrate -o none 2>/dev/null || true; echo "Removed temp firewall rule"' EXIT
 az sql server firewall-rule create -g "$RG" -s "$SQL" -n temp-migrate --start-ip-address "$START" --end-ip-address "$END" -o none
-trap 'az sql server firewall-rule delete -g "$RG" -s "$SQL" -n temp-migrate -o none && echo "Removed temp firewall rule"' EXIT
 
 # A new firewall rule can take a few minutes to apply.
 for attempt in 1 2 3 4 5 6; do

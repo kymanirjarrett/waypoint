@@ -910,6 +910,13 @@ img {
   font-size: var(--wp-step-display);
 }
 
+.wp-countdown {
+  display: inline-block;
+  min-width: 2ch;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
 /* ---------- Footer ---------- */
 
 .site-footer {

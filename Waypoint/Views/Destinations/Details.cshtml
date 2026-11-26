@@ -1,24 +1,24 @@
-@model Destination
+@model DestinationDetailsViewModel
 @{
-    ViewData["Title"] = Model.Name;
-    ViewData["Description"] = Model.Summary;
+    ViewData["Title"] = Model.Destination.Name;
+    ViewData["Description"] = Model.Destination.Summary;
     var usd = System.Globalization.CultureInfo.GetCultureInfo("en-US");
 }
 
 <header class="page-header">
     <p class="wp-back"><a asp-action="Index">All destinations</a></p>
     <div>
-        <h1>@Model.Name</h1>
-        <p class="wp-place__meta mt-2">@Model.Country &middot; @Model.Continent</p>
+        <h1>@Model.Destination.Name</h1>
+        <p class="wp-place__meta mt-2">@Model.Destination.Country &middot; @Model.Destination.Continent</p>
     </div>
 </header>
 
-@if (!string.IsNullOrEmpty(Model.ImagePath))
+@if (!string.IsNullOrEmpty(Model.Destination.ImagePath))
 {
     <figure class="wp-feature-photo">
-        <img src="@Model.ImagePath" alt="@Model.ImageAlt" width="1600" height="1067" fetchpriority="high" />
+        <img src="@Model.Destination.ImagePath" alt="@Model.Destination.ImageAlt" width="1600" height="1067" fetchpriority="high" />
         <figcaption class="wp-photo-credit">
-            Photo: <a href="@Model.ImageCreditUrl" rel="noopener">@Model.ImageCredit on Unsplash</a>
+            Photo: <a href="@Model.Destination.ImageCreditUrl" rel="noopener">@Model.Destination.ImageCredit on Unsplash</a>
         </figcaption>
     </figure>
 }
@@ -26,9 +26,9 @@
 <section class="wp-section">
     <div class="wp-detail">
         <article class="wp-measure">
-            <p class="wp-detail__lead">@Model.Summary</p>
-            <p>@Model.Description</p>
-            @if (ViewData["Next"] is Destination next)
+            <p class="wp-detail__lead">@Model.Destination.Summary</p>
+            <p>@Model.Destination.Description</p>
+            @if (Model.Next is { } next)
             {
                 <p class="wp-next">
                     Next destination:
@@ -40,24 +40,24 @@
             <h2 id="facts-heading">Before you go</h2>
             <dl>
                 <div>
-                    <dt>@Html.DisplayNameFor(m => m.BestTimeToVisit)</dt>
-                    <dd>@Model.BestTimeToVisit</dd>
+                    <dt>@Html.DisplayNameFor(m => m.Destination.BestTimeToVisit)</dt>
+                    <dd>@Model.Destination.BestTimeToVisit</dd>
                 </div>
                 <div>
-                    <dt>@Html.DisplayNameFor(m => m.AverageDailyBudgetUsd)</dt>
-                    <dd>About @Model.AverageDailyBudgetUsd.ToString("C0", usd) a day</dd>
+                    <dt>@Html.DisplayNameFor(m => m.Destination.AverageDailyBudgetUsd)</dt>
+                    <dd>About @Model.Destination.AverageDailyBudgetUsd.ToString("C0", usd) a day</dd>
                 </div>
                 <div>
                     <dt>Team rating</dt>
-                    <dd>@Model.Rating out of 5</dd>
+                    <dd>@Model.Destination.Rating out of 5</dd>
                 </div>
                 <div>
-                    <dt>@Html.DisplayNameFor(m => m.RecommendedBy)</dt>
-                    <dd>@Model.RecommendedBy</dd>
+                    <dt>@Html.DisplayNameFor(m => m.Destination.RecommendedBy)</dt>
+                    <dd>@Model.Destination.RecommendedBy</dd>
                 </div>
                 <div>
                     <dt>Status</dt>
-                    <dd>@(Model.Visited ? "Visited" : "On the wish list")</dd>
+                    <dd>@(Model.Destination.Visited ? "Visited" : "On the wish list")</dd>
                 </div>
             </dl>
         </aside>

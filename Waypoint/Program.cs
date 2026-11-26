@@ -3,6 +3,7 @@ using Azure.Monitor.OpenTelemetry.AspNetCore;
 using OpenTelemetry.Logs;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Waypoint;
 using Waypoint.Data;
@@ -23,9 +24,17 @@ if (!string.IsNullOrWhiteSpace(builder.Configuration["APPLICATIONINSIGHTS_CONNEC
 
 // Register the EF Core DbContext so controllers can receive it through constructor injection.
 // The connection string lives in appsettings.json and points at SQL Server LocalDB.
+var connectionString = builder.Configuration.GetConnectionString("WaypointDb")
+    ?? throw new InvalidOperationException("Connection string 'WaypointDb' not found.");
+if (builder.Environment.IsProduction())
+{
+    // A resuming Azure SQL database stalls the login until the connect timeout (default 15 s) expires.
+    // Cap it at 10 s so visitors reach the "Waking up" page quickly instead of a long blank load.
+    connectionString = new SqlConnectionStringBuilder(connectionString) { ConnectTimeout = 10 }.ConnectionString;
+}
+
 builder.Services.AddDbContext<WaypointDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("WaypointDb")
-            ?? throw new InvalidOperationException("Connection string 'WaypointDb' not found."),
+    options.UseSqlServer(connectionString,
         // Retry briefly (~10 s) for ordinary blips. A paused free database takes about a minute to resume, so rather than
         // hold the visitor on a blank loading screen, give up early and show the "Waking up" page, which reloads itself.
         sqlOptions => sqlOptions.EnableRetryOnFailure(

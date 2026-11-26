@@ -11,9 +11,9 @@ Files live in `wwwroot/images/destinations/`, cropped to 1600x1067 WebP and kept
 | `destinations/paris.webp` | Howard Walsh | [Unsplash](https://unsplash.com/photos/eiffel-tower-with-boats-on-the-seine-river-nj6rYQh2nvc) |
 | `destinations/reykjavik.webp` | NIR HIMI | [Unsplash](https://unsplash.com/photos/rainbow-street-leading-to-hallgrimskirkja-reykjavik-IVNLK9yjd1I) |
 | `destinations/venice.webp` | Rafael Peier | [Unsplash](https://unsplash.com/photos/venice-canal-with-historic-buildings-boats-and-a-grand-dome--AM_3ESREqQ) |
-| `destinations/marrakech.webp` | JR Harris | [Unsplash](https://unsplash.com/photos/green-metal-window-frame-on-brown-concrete-building-slWOnYaNYWI) |
+| `destinations/san-francisco.webp` | Maarten van den Heuvel | [Unsplash](https://unsplash.com/photos/golden-gate-bridge-during-daytime-gZXx8lKAb7Y) |
 | `destinations/queenstown.webp` | Donald Wu | [Unsplash](https://unsplash.com/photos/aerial-view-of-queenstown-and-lake-wakatipu-new-zealand-sU2NHLTnVTI) |
-| `destinations/cusco.webp` | Sophia Simoes | [Unsplash](https://unsplash.com/photos/plaza-de-armas-in-cusco-with-cathedral-and-mountains-pw7eT19wz4c) |
+| `destinations/prague.webp` | William Zhang | [Unsplash](https://unsplash.com/photos/charles-bridge-and-prague-castle-6En4WYsNYXM) |
 
 ### Gallery
 

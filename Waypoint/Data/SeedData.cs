@@ -13,7 +13,7 @@ public static class SeedData
             Summary = "Temples, gardens, and quiet lanes that reward slow wandering.",
             Description = "Japan's former capital has more than 1,600 temples and shrines. Walk the torii tunnels at Fushimi Inari early in the morning, rent a bike to reach the Philosopher's Path, and spend an evening in Gion. Buy an IC card for buses and trains, and plan at least three days.",
             BestTimeToVisit = "March-May, October-November", AverageDailyBudgetUsd = 150m, Rating = 5,
-            RecommendedBy = "Riddhi", Visited = true,
+            RecommendedBy = "Riddhi", Visited = false,
             ImagePath = "/images/destinations/kyoto.webp",
             ImageAlt = "A stone path curving through a tunnel of vermilion torii gates at Fushimi Inari Shrine, with a black lantern hanging on the left.",
             ImageCredit = "Stefano Bucciarelli", ImageCreditUrl = "https://unsplash.com/photos/thousands-of-vibrant-orange-torii-gates-at-fushimi-inari-shrine-Vu9O6DRGXQU",
@@ -64,14 +64,14 @@ public static class SeedData
         },
         new()
         {
-            Id = 6, Name = "Marrakech", Slug = "marrakech", Country = "Morocco", Continent = "Africa",
-            Summary = "Souks, riads, and a gateway to the Atlas Mountains.",
-            Description = "Get lost in the medina souks, watch Jemaa el-Fnaa come alive at night, and stay in a riad with a courtyard. Agree on taxi fares before you get in, and consider a day trip to the Atlas Mountains or an overnight in the Agafay desert.",
-            BestTimeToVisit = "March-May, September-November", AverageDailyBudgetUsd = 70m, Rating = 4,
+            Id = 6, Name = "San Francisco", Slug = "san-francisco", Country = "United States", Continent = "North America",
+            Summary = "Steep hills, cable cars, and fog rolling under the Golden Gate.",
+            Description = "Walk or bike across the Golden Gate Bridge, ride a cable car up Nob Hill, and book Alcatraz tickets well ahead because tours sell out. Spend an afternoon in Golden Gate Park, then eat your way through the Mission and Chinatown. Pack layers, since summer days are often cool and foggy, and use a Clipper card for Muni, cable cars, and BART.",
+            BestTimeToVisit = "September-November", AverageDailyBudgetUsd = 250m, Rating = 5,
             RecommendedBy = "Riddhi", Visited = false,
-            ImagePath = "/images/destinations/marrakech.webp",
-            ImageAlt = "A green-framed window with a white iron grille in a pale plaster wall, in a narrow alley of the Marrakech medina.",
-            ImageCredit = "JR Harris", ImageCreditUrl = "https://unsplash.com/photos/green-metal-window-frame-on-brown-concrete-building-slWOnYaNYWI",
+            ImagePath = "/images/destinations/san-francisco.webp",
+            ImageAlt = "The red Golden Gate Bridge stretching across blue water from a rocky headland, with the San Francisco skyline faint in the distance.",
+            ImageCredit = "Maarten van den Heuvel", ImageCreditUrl = "https://unsplash.com/photos/golden-gate-bridge-during-daytime-gZXx8lKAb7Y",
         },
         new()
         {
@@ -86,14 +86,14 @@ public static class SeedData
         },
         new()
         {
-            Id = 8, Name = "Cusco", Slug = "cusco", Country = "Peru", Continent = "South America",
-            Summary = "Inca history and the starting point for Machu Picchu.",
-            Description = "Give yourself two days to adjust to the altitude (3,400 m) before hiking. Visit Sacsayhuaman and the Sacred Valley, then take the train or hike the Inca Trail to Machu Picchu. Trail permits sell out months ahead, so book early.",
-            BestTimeToVisit = "May-September", AverageDailyBudgetUsd = 60m, Rating = 5,
+            Id = 8, Name = "Prague", Slug = "prague", Country = "Czech Republic", Continent = "Europe",
+            Summary = "Gothic spires, cobbled lanes, and a castle above the river.",
+            Description = "Cross Charles Bridge early in the morning before the crowds, watch the Astronomical Clock strike the hour in Old Town Square, and climb up to Prague Castle and St. Vitus Cathedral. The center is easy to explore on foot, and trams cover the rest. Prices are lower than in much of Western Europe, so plan three or four days.",
+            BestTimeToVisit = "April-May, September-October", AverageDailyBudgetUsd = 100m, Rating = 5,
             RecommendedBy = "Riddhi", Visited = false,
-            ImagePath = "/images/destinations/cusco.webp",
-            ImageAlt = "Cusco's Plaza de Armas under storm clouds, with a colonial church on the left and brown Andean hills behind red-tiled roofs.",
-            ImageCredit = "Sophia Simoes", ImageCreditUrl = "https://unsplash.com/photos/plaza-de-armas-in-cusco-with-cathedral-and-mountains-pw7eT19wz4c",
+            ImagePath = "/images/destinations/prague.webp",
+            ImageAlt = "Crowds crossing the lamp-lit Charles Bridge at dusk, with Prague Castle and St. Vitus Cathedral glowing on the hill across the Vltava River.",
+            ImageCredit = "William Zhang", ImageCreditUrl = "https://unsplash.com/photos/charles-bridge-and-prague-castle-6En4WYsNYXM",
         },
     ];
 }
